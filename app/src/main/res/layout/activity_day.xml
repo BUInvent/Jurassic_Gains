@@ -14,6 +14,15 @@ tools:context=".DayActivity">
     android:gravity="center"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/weekText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:textAlignment="center"
+        android:textSize="40sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +39,7 @@ tools:context=".DayActivity">
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" 
             android:textSize="20sp"
-            android:text="Day 1 - back and bis"/>
+            android:text="Day 1 - chest and tri's"/>
     </LinearLayout>
 
     <LinearLayout
@@ -48,7 +57,7 @@ tools:context=".DayActivity">
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="Day 2 - chest and tris"/>
+            android:text="Day 2 - back and bi's"/>
     </LinearLayout>
 
     <LinearLayout
@@ -62,7 +71,8 @@ tools:context=".DayActivity">
             android:layout_height="wrap_content"
             android:layout_marginLeft="32dp"
             android:text="Day 3 - rest"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:enabled="false"/>
     </LinearLayout>
 
     <LinearLayout
@@ -112,7 +122,8 @@ tools:context=".DayActivity">
             android:layout_height="wrap_content"
             android:layout_marginLeft="32dp"
             android:text="Day 6 - rest"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:enabled="false"/>
     </LinearLayout>
 
     <LinearLayout
@@ -126,7 +137,8 @@ tools:context=".DayActivity">
             android:layout_height="wrap_content"
             android:layout_marginLeft="32dp"
             android:text="Day 7 - rest"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:enabled="false"/>
     </LinearLayout>
 
 </LinearLayout>
