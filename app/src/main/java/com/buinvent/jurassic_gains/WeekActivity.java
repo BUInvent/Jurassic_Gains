@@ -1,4 +1,4 @@
-package com.example.jason.jurassic_gains;
+package com.buinvent.jurassic_gains;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -140,8 +140,9 @@ public class WeekActivity extends AppCompatActivity {
     }
 
     private void setDay(final String week){
-        Intent intent = new Intent(getApplicationContext(), DayActivity.class);
-//        intent.putExtra(DayActivity.)
+        Intent day = new Intent(getApplicationContext(), DayActivity.class);
+        day.putExtra(DayActivity.EXTRA_WEEK, week);
+        startActivity(day);
     }
 
 }

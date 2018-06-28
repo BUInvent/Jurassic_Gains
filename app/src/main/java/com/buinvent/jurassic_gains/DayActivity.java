@@ -1,11 +1,11 @@
-package com.example.jason.jurassic_gains;
+package com.buinvent.jurassic_gains;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class DayActivity extends AppCompatActivity {
 
-    public static final String EXTRA_WEEK = "com.example.jason.jurassic_gains.";
+    public static final String EXTRA_WEEK = "com.buinvent.jurassic_gains.WEEK";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

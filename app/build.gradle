@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.example.jason.jurassic_gains"
+        applicationId "com.buinvent.jurassic_gains"
         minSdkVersion 15
         targetSdkVersion 27
         versionCode 1
