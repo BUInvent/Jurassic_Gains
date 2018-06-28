@@ -60,7 +60,7 @@ tools:context=".DayActivity">
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="32dp"
             android:text="Day 3 - rest"
             android:textSize="20sp" />
     </LinearLayout>
@@ -110,8 +110,8 @@ tools:context=".DayActivity">
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:text="Day 6"
+            android:layout_marginLeft="32dp"
+            android:text="Day 6 - rest"
             android:textSize="20sp" />
     </LinearLayout>
 
@@ -124,8 +124,8 @@ tools:context=".DayActivity">
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:text="Day 7"
+            android:layout_marginLeft="32dp"
+            android:text="Day 7 - rest"
             android:textSize="20sp" />
     </LinearLayout>
 

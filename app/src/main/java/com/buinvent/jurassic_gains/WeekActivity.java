@@ -61,7 +61,10 @@ public class WeekActivity extends AppCompatActivity {
             buttons[i] = new Button(getApplicationContext());
             buttons[i].setTextSize(30);
             buttons[i].setGravity(Gravity.CENTER);
-            buttons[i].setText("Week " + String.valueOf(i + 1));
+            String weekText = "Week " + String.valueOf(i + 1);
+            buttons[i].setText(weekText);
+            buttons[i].setOnClickListener(view -> setDay(weekText));
+
             weekLayout.addView(buttons[i],buttonLayoutParams);
 
             if(i > 1) {
