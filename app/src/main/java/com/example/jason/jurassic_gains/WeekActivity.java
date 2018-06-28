@@ -35,16 +35,19 @@ public class WeekActivity extends AppCompatActivity {
         checkBoxLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
         buttonLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 
-        for (int i = 1; i <= WEEKS_NUM; i++) {
+        CheckBox[] checkBoxes = new CheckBox[WEEKS_NUM];
+        Button[] buttons = new Button[WEEKS_NUM];
+
+        for (int i = 0; i < WEEKS_NUM; i++) {
 
             LinearLayout weekLayout = new LinearLayout(getApplicationContext());
             weekLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-            final CheckBox checkBox = new CheckBox(getApplicationContext());
-            checkBox.setGravity(Gravity.CENTER);
-            checkBox.setScaleX((float)1.3);
-            checkBox.setScaleY((float)1.3);
-            weekLayout.addView(checkBox, checkBoxLayoutParams);
+            checkBoxes[i] = new CheckBox(getApplicationContext());
+            checkBoxes[i].setGravity(Gravity.CENTER);
+            checkBoxes[i].setScaleX((float)1.3);
+            checkBoxes[i].setScaleY((float)1.3);
+            weekLayout.addView(checkBoxes[i], checkBoxLayoutParams);
 
             if(!weekPreferences.contains("checkbox_week" + Integer.toString(i))){
                 SharedPreferences.Editor editor = weekPreferences.edit();
@@ -52,10 +55,11 @@ public class WeekActivity extends AppCompatActivity {
                 editor.commit();
             }
 
-            checkBox.setChecked(weekPreferences.getBoolean("checkbox_week" + Integer.toString(i), false));
+            checkBoxes[i].setChecked(weekPreferences.getBoolean("checkbox_week" + Integer.toString(i), false));
 
             final int weekNum = i;
-            checkBox.setOnClickListener(new View.OnClickListener() {
+            final CheckBox checkBox = checkBoxes[i];
+            checkBoxes[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     SharedPreferences.Editor editor = weekPreferences.edit();
@@ -64,18 +68,19 @@ public class WeekActivity extends AppCompatActivity {
                 }
             });
 
-            Button button = new Button(getApplicationContext());
-            button.setTextSize(30);
-            button.setGravity(Gravity.CENTER);
-            button.setText("Week " + String.valueOf(i));
-            weekLayout.addView(button, buttonLayoutParams);
+            buttons[i] = new Button(getApplicationContext());
+            buttons[i].setTextSize(30);
+            buttons[i].setGravity(Gravity.CENTER);
+            buttons[i].setText("Week " + String.valueOf(i + 1));
+            weekLayout.addView(buttons[i],buttonLayoutParams);
+
+            if (i != 0 && !checkBoxes[i-1].isChecked()) {
+                checkBoxes[i].setEnabled(false);
+                buttons[i].setEnabled(false);
+            }
 
             mLinearLayout.addView(weekLayout, weekLayoutParams);
         }
-
-    }
-
-    private void checkBoxListener(String week){
 
     }
 
