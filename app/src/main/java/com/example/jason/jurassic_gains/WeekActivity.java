@@ -35,8 +35,8 @@ public class WeekActivity extends AppCompatActivity {
         checkBoxLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
         buttonLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 
-        CheckBox[] checkBoxes = new CheckBox[WEEKS_NUM + 1];
-        Button[] buttons = new Button[WEEKS_NUM + 1];
+        CheckBox[] checkBoxes = new CheckBox[WEEKS_NUM];
+        Button[] buttons = new Button[WEEKS_NUM];
 
         for (int i = 0; i < WEEKS_NUM; i++) {
 
@@ -49,13 +49,13 @@ public class WeekActivity extends AppCompatActivity {
             checkBoxes[i].setScaleY((float)1.3);
             weekLayout.addView(checkBoxes[i], checkBoxLayoutParams);
 
-            if(!weekPreferences.contains("checkbox_week" + Integer.toString(i))){
+            if(!weekPreferences.contains("checkbox_week" + Integer.toString(i+1))){
                 SharedPreferences.Editor editor = weekPreferences.edit();
-                editor.putBoolean("checkbox_week" + Integer.toString(i), false);
+                editor.putBoolean("checkbox_week" + Integer.toString(i+1), false);
                 editor.commit();
             }
 
-            checkBoxes[i].setChecked(weekPreferences.getBoolean("checkbox_week" + Integer.toString(i), false));
+            checkBoxes[i].setChecked(weekPreferences.getBoolean("checkbox_week" + Integer.toString(i+1), false));
 
             buttons[i] = new Button(getApplicationContext());
             buttons[i].setTextSize(30);
@@ -64,7 +64,7 @@ public class WeekActivity extends AppCompatActivity {
             weekLayout.addView(buttons[i],buttonLayoutParams);
 
             if(i > 1) {
-                checkBoxListener(i-1, checkBoxes[i-1], checkBoxes[i - 2], checkBoxes[i], buttons[i]);
+                checkBoxListener(i, checkBoxes[i-1], checkBoxes[i-2], checkBoxes[i], buttons[i]);
             }
 
             if (i != 0 && !checkBoxes[i-1].isChecked()) {
