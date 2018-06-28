@@ -63,14 +63,9 @@ public class WeekActivity extends AppCompatActivity {
             buttons[i].setText("Week " + String.valueOf(i + 1));
             weekLayout.addView(buttons[i],buttonLayoutParams);
 
-            
-
-            System.out.println("i = " + Integer.toString(i));
-            if(i > 0) {
-                checkBoxListener(i-1, checkBoxes[i - 1], checkBoxes[i], buttons[i]);
+            if(i > 1) {
+                checkBoxListener(i-1, checkBoxes[i-2], checkBoxes[i - 1], checkBoxes[i], buttons[i]);
             }
-
-
 
             if (i != 0 && !checkBoxes[i-1].isChecked()) {
                 checkBoxes[i].setEnabled(false);
@@ -80,16 +75,27 @@ public class WeekActivity extends AppCompatActivity {
             mLinearLayout.addView(weekLayout, weekLayoutParams);
         }
 
+        checkBoxListener(0, null, checkBoxes[0], checkBoxes[1], buttons[1]);
+        checkBoxListener(WEEKS_NUM-1, checkBoxes[WEEKS_NUM-2], checkBoxes[WEEKS_NUM-1],
+                         null, null);
+
     }
 
-    private void checkBoxListener(final int weekNum, final CheckBox currentCheckBox, final CheckBox nextCheckBox,
+    private void checkBoxListener(final int weekNum, final CheckBox previousCheckBox,
+                                  final CheckBox currentCheckBox, final CheckBox nextCheckBox,
                                   final Button nextButton){
 
         currentCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nextCheckBox.setEnabled(currentCheckBox.isChecked());
-                nextButton.setEnabled(currentCheckBox.isChecked());
+
+                if(nextCheckBox != null) {
+                    nextCheckBox.setEnabled(currentCheckBox.isChecked());
+                    nextButton.setEnabled(currentCheckBox.isChecked());
+                }
+
+                if(previousCheckBox != null)
+                    previousCheckBox.setEnabled(!currentCheckBox.isChecked());
 
                 SharedPreferences.Editor editor = weekPreferences.edit();
                 editor.putBoolean("checkbox_week" + Integer.toString(weekNum), currentCheckBox.isChecked());
