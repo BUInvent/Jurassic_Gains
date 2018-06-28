@@ -35,48 +35,107 @@ public class WeekActivity extends AppCompatActivity {
         checkBoxLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
         buttonLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 
-        for (int i = 1; i <= WEEKS_NUM; i++) {
+        CheckBox[] checkBoxes = new CheckBox[WEEKS_NUM];
+        Button[] buttons = new Button[WEEKS_NUM];
+
+        for (int i = 0; i < WEEKS_NUM; i++) {
 
             LinearLayout weekLayout = new LinearLayout(getApplicationContext());
             weekLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-            final CheckBox checkBox = new CheckBox(getApplicationContext());
-            checkBox.setGravity(Gravity.CENTER);
-            checkBox.setScaleX((float)1.3);
-            checkBox.setScaleY((float)1.3);
-            weekLayout.addView(checkBox, checkBoxLayoutParams);
+            checkBoxes[i] = new CheckBox(getApplicationContext());
+            checkBoxes[i].setGravity(Gravity.CENTER);
+            checkBoxes[i].setScaleX((float)1.3);
+            checkBoxes[i].setScaleY((float)1.3);
+            weekLayout.addView(checkBoxes[i], checkBoxLayoutParams);
 
-            if(!weekPreferences.contains("checkbox_week" + Integer.toString(i))){
+            if(!weekPreferences.contains("checkbox_week" + Integer.toString(i+1))){
                 SharedPreferences.Editor editor = weekPreferences.edit();
-                editor.putBoolean("checkbox_week" + Integer.toString(i), false);
+                editor.putBoolean("checkbox_week" + Integer.toString(i+1), false);
                 editor.commit();
             }
 
-            checkBox.setChecked(weekPreferences.getBoolean("checkbox_week" + Integer.toString(i), false));
+            checkBoxes[i].setChecked(weekPreferences.getBoolean("checkbox_week" + Integer.toString(i+1), false));
 
-            final int weekNum = i;
-            checkBox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    SharedPreferences.Editor editor = weekPreferences.edit();
-                    editor.putBoolean("checkbox_week" + Integer.toString(weekNum), checkBox.isChecked());
-                    editor.apply();
-                }
-            });
+            buttons[i] = new Button(getApplicationContext());
+            buttons[i].setTextSize(30);
+            buttons[i].setGravity(Gravity.CENTER);
+            buttons[i].setText("Week " + String.valueOf(i + 1));
+            weekLayout.addView(buttons[i],buttonLayoutParams);
 
-            Button button = new Button(getApplicationContext());
-            button.setTextSize(30);
-            button.setGravity(Gravity.CENTER);
-            button.setText("Week " + String.valueOf(i));
-            weekLayout.addView(button, buttonLayoutParams);
+            if(i > 1) {
+                checkBoxListener(i, checkBoxes[i-1], checkBoxes[i-2], checkBoxes[i], buttons[i]);
+            }
+
+            if (i != 0 && !checkBoxes[i-1].isChecked()) {
+                checkBoxes[i].setEnabled(false);
+                buttons[i].setEnabled(false);
+            }
+
+            if (i != 0 && checkBoxes[i].isChecked())
+                checkBoxes[i-1].setEnabled(false);
 
             mLinearLayout.addView(weekLayout, weekLayoutParams);
         }
 
+        checkBoxListener(checkBoxes[0], checkBoxes[1], buttons[1]);
+        checkBoxListener(checkBoxes[WEEKS_NUM-1], checkBoxes[WEEKS_NUM-2]);
+
     }
 
-    private void checkBoxListener(String week){
 
+//    This is for all weeks that are not first or last
+    private void checkBoxListener(final int weekNum, final CheckBox currentCheckBox,
+                                  final CheckBox previousCheckBox, final CheckBox nextCheckBox,
+                                  final Button nextButton){
+
+        currentCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                nextCheckBox.setEnabled(currentCheckBox.isChecked());
+                nextButton.setEnabled(currentCheckBox.isChecked());
+                previousCheckBox.setEnabled(!currentCheckBox.isChecked());
+
+                SharedPreferences.Editor editor = weekPreferences.edit();
+                editor.putBoolean("checkbox_week" + Integer.toString(weekNum), currentCheckBox.isChecked());
+                editor.apply();
+            }
+        });
+    }
+
+//    This is for the first week since it doesn't have a previous week
+    private void checkBoxListener(final CheckBox currentCheckBox,
+                                  final CheckBox nextCheckBox, final Button nextButton){
+
+        currentCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                nextCheckBox.setEnabled(currentCheckBox.isChecked());
+                nextButton.setEnabled(currentCheckBox.isChecked());
+
+                SharedPreferences.Editor editor = weekPreferences.edit();
+                editor.putBoolean("checkbox_week1", currentCheckBox.isChecked());
+                editor.apply();
+            }
+        });
+    }
+
+//    For the last week since it doesn't have a next week
+    private void checkBoxListener(final CheckBox currentCheckBox, final CheckBox previousCheckBox){
+
+        currentCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                previousCheckBox.setEnabled(!currentCheckBox.isChecked());
+
+                SharedPreferences.Editor editor = weekPreferences.edit();
+                editor.putBoolean("checkbox_week" + Integer.toString(WEEKS_NUM), currentCheckBox.isChecked());
+                editor.apply();
+            }
+        });
     }
 
 }
