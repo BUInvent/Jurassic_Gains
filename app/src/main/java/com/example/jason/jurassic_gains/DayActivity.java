@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 public class DayActivity extends AppCompatActivity {
 
+    public static final String EXTRA_WEEK = "com.example.jason.jurassic_gains.";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,5 +1,6 @@
 package com.example.jason.jurassic_gains;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -136,6 +137,11 @@ public class WeekActivity extends AppCompatActivity {
                 editor.apply();
             }
         });
+    }
+
+    private void setDay(final String week){
+        Intent intent = new Intent(getApplicationContext(), DayActivity.class);
+//        intent.putExtra(DayActivity.)
     }
 
 }
