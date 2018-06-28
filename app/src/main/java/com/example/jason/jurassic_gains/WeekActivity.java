@@ -72,6 +72,9 @@ public class WeekActivity extends AppCompatActivity {
                 buttons[i].setEnabled(false);
             }
 
+            if (i != 0 && checkBoxes[i].isChecked())
+                checkBoxes[i-1].setEnabled(false);
+
             mLinearLayout.addView(weekLayout, weekLayoutParams);
         }
 
