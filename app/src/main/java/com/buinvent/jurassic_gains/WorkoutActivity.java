@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -71,6 +72,7 @@ public class WorkoutActivity extends AppCompatActivity {
             workoutLayout.addView(exerciseText, exerciseTextParams);
 
             EditText allWeightText = new EditText(getApplicationContext());
+            allWeightText.setInputType(InputType.TYPE_CLASS_NUMBER);
             allWeightText.setWidth(100);
             allWeightText.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(3)});
             allWeightText.setTextSize(14);
@@ -132,12 +134,14 @@ public class WorkoutActivity extends AppCompatActivity {
                 statLayout.addView(previousInput, exercisePrevParams);
 
                 EditText lbsInput = new EditText(getApplicationContext());
+                lbsInput.setInputType(InputType.TYPE_CLASS_NUMBER);
                 lbsInput.setGravity(Gravity.CENTER);
                 lbsInput.setTextSize(16);
                 lbsInput.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(3)});
                 statLayout.addView(lbsInput, exerciseStatParams);
 
                 EditText repsInput = new EditText(getApplicationContext());
+                repsInput.setInputType(InputType.TYPE_CLASS_NUMBER);
                 repsInput.setGravity(Gravity.CENTER);
                 repsInput.setTextSize(16);
                 repsInput.setText("8");
