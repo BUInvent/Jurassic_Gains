@@ -116,10 +116,37 @@ public class WorkoutActivity extends AppCompatActivity {
             mLinearLayout.addView(statLabelLayout, linearLayoutParams);
 
 
-//            for(int j=1; j<3; j++){
-//                LinearLayout statLayout = new LinearLayout(getApplicationContext());
-//                statLabelLayout.setOrientation(Linea);
-//            }
+            for(int j=1; j<=3; j++){
+                LinearLayout statLayout = new LinearLayout(getApplicationContext());
+                statLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+                TextView setNum = new TextView(getApplicationContext());
+                setNum.setText(Integer.toString(j));
+                setNum.setTextSize(16);
+                setNum.setGravity(Gravity.CENTER);
+                statLayout.addView(setNum, repNumParams);
+
+                TextView previousInput = new TextView(getApplicationContext());
+                previousInput.setGravity(Gravity.CENTER);
+                previousInput.setTextSize(16);
+                statLayout.addView(previousInput, exercisePrevParams);
+
+                EditText lbsInput = new EditText(getApplicationContext());
+                lbsInput.setGravity(Gravity.CENTER);
+                lbsInput.setTextSize(16);
+                lbsInput.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(3)});
+                statLayout.addView(lbsInput, exerciseStatParams);
+
+                EditText repsInput = new EditText(getApplicationContext());
+                repsInput.setGravity(Gravity.CENTER);
+                repsInput.setTextSize(16);
+                repsInput.setText("8");
+                repsInput.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(2)});
+                statLayout.addView(repsInput, exerciseStatParams);
+
+                mLinearLayout.addView(statLayout, linearLayoutParams);
+
+            }
 
         }
 
