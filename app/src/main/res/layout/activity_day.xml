@@ -30,6 +30,7 @@ tools:context=".DayActivity">
         android:layout_weight="1"
         android:orientation="horizontal">
         <CheckBox
+            android:id="@+id/checkbox_day1"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="center"
@@ -48,6 +49,7 @@ tools:context=".DayActivity">
         android:layout_weight="1"
         android:orientation="horizontal">
         <CheckBox
+            android:id="@+id/checkbox_day2"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="center"
@@ -81,6 +83,7 @@ tools:context=".DayActivity">
         android:layout_weight="1"
         android:orientation="horizontal">
         <CheckBox
+            android:id="@+id/checkbox_day4"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="center"
@@ -99,6 +102,7 @@ tools:context=".DayActivity">
         android:layout_weight="1"
         android:orientation="horizontal">
         <CheckBox
+            android:id="@+id/checkbox_day5"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="center"

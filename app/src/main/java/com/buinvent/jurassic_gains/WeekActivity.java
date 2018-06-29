@@ -29,6 +29,7 @@ public class WeekActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_week);
+
         mLinearLayout = findViewById(R.id.week_layout);
         weekPreferences = getSharedPreferences(WEEK_PREFERENCES, Context.MODE_PRIVATE);
 
@@ -55,7 +56,6 @@ public class WeekActivity extends AppCompatActivity {
                 editor.putBoolean("checkbox_week" + Integer.toString(i+1), false);
                 editor.commit();
             }
-
             checkBoxes[i].setChecked(weekPreferences.getBoolean("checkbox_week" + Integer.toString(i+1), false));
 
             buttons[i] = new Button(getApplicationContext());
@@ -93,18 +93,14 @@ public class WeekActivity extends AppCompatActivity {
                                   final CheckBox previousCheckBox, final CheckBox nextCheckBox,
                                   final Button nextButton){
 
-        currentCheckBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        currentCheckBox.setOnClickListener((View v) -> {
+            nextCheckBox.setEnabled(currentCheckBox.isChecked());
+            nextButton.setEnabled(currentCheckBox.isChecked());
+            previousCheckBox.setEnabled(!currentCheckBox.isChecked());
 
-                nextCheckBox.setEnabled(currentCheckBox.isChecked());
-                nextButton.setEnabled(currentCheckBox.isChecked());
-                previousCheckBox.setEnabled(!currentCheckBox.isChecked());
-
-                SharedPreferences.Editor editor = weekPreferences.edit();
-                editor.putBoolean("checkbox_week" + Integer.toString(weekNum), currentCheckBox.isChecked());
-                editor.apply();
-            }
+            SharedPreferences.Editor editor = weekPreferences.edit();
+            editor.putBoolean("checkbox_week" + Integer.toString(weekNum), currentCheckBox.isChecked());
+            editor.apply();
         });
     }
 
@@ -112,33 +108,25 @@ public class WeekActivity extends AppCompatActivity {
     private void checkBoxListener(final CheckBox currentCheckBox,
                                   final CheckBox nextCheckBox, final Button nextButton){
 
-        currentCheckBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        currentCheckBox.setOnClickListener((View v) -> {
+            nextCheckBox.setEnabled(currentCheckBox.isChecked());
+            nextButton.setEnabled(currentCheckBox.isChecked());
 
-                nextCheckBox.setEnabled(currentCheckBox.isChecked());
-                nextButton.setEnabled(currentCheckBox.isChecked());
-
-                SharedPreferences.Editor editor = weekPreferences.edit();
-                editor.putBoolean("checkbox_week1", currentCheckBox.isChecked());
-                editor.apply();
-            }
+            SharedPreferences.Editor editor = weekPreferences.edit();
+            editor.putBoolean("checkbox_week1", currentCheckBox.isChecked());
+            editor.apply();
         });
     }
 
 //    For the last week since it doesn't have a next week
     private void checkBoxListener(final CheckBox currentCheckBox, final CheckBox previousCheckBox){
 
-        currentCheckBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        currentCheckBox.setOnClickListener((View v) -> {
+            previousCheckBox.setEnabled(!currentCheckBox.isChecked());
 
-                previousCheckBox.setEnabled(!currentCheckBox.isChecked());
-
-                SharedPreferences.Editor editor = weekPreferences.edit();
-                editor.putBoolean("checkbox_week" + Integer.toString(WEEKS_NUM), currentCheckBox.isChecked());
-                editor.apply();
-            }
+            SharedPreferences.Editor editor = weekPreferences.edit();
+            editor.putBoolean("checkbox_week" + Integer.toString(WEEKS_NUM), currentCheckBox.isChecked());
+            editor.apply();
         });
     }
 
