@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">Jurassic Gains</string>
+    <string name="pounds">LBS</string>
+    <string name="hash">#</string>
+    <string name="previous">PREVIOUS</string>
+    <string name="reps">REPS</string>
+
     <string name="day1">DAY 1 - CHEST AND TRI\'S</string>
     <string name="day2">DAY 2 - BACK AND BI\'S</string>
     <string name="day3">DAY 3 - REST</string>
