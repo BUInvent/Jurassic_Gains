@@ -1,4 +1,4 @@
-package com.example.jason.jurassic_gains;
+package com.buinvent.jurassic_gains;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.jason.jurassic_gains", appContext.getPackageName());
+        assertEquals("com.buinvent.jurassic_gains", appContext.getPackageName());
     }
 }

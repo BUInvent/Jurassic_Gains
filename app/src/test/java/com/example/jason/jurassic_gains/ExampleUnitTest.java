@@ -1,4 +1,4 @@
-package com.example.jason.jurassic_gains;
+package com.buinvent.jurassic_gains;
 
 import org.junit.Test;
 

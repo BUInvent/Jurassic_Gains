@@ -1,5 +1,6 @@
-package com.example.jason.jurassic_gains;
+package com.buinvent.jurassic_gains;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -60,7 +61,10 @@ public class WeekActivity extends AppCompatActivity {
             buttons[i] = new Button(getApplicationContext());
             buttons[i].setTextSize(30);
             buttons[i].setGravity(Gravity.CENTER);
-            buttons[i].setText("Week " + String.valueOf(i + 1));
+            String weekText = "Week " + String.valueOf(i + 1);
+            buttons[i].setText(weekText);
+            buttons[i].setOnClickListener(view -> setDay(weekText));
+
             weekLayout.addView(buttons[i],buttonLayoutParams);
 
             if(i > 1) {
@@ -136,6 +140,12 @@ public class WeekActivity extends AppCompatActivity {
                 editor.apply();
             }
         });
+    }
+
+    private void setDay(final String week){
+        Intent day = new Intent(getApplicationContext(), DayActivity.class);
+        day.putExtra(DayActivity.EXTRA_WEEK, week);
+        startActivity(day);
     }
 
 }
