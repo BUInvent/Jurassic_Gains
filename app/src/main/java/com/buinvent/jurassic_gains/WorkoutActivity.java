@@ -19,12 +19,12 @@ import android.widget.TextView;
 public class WorkoutActivity extends AppCompatActivity {
 
     LinearLayout mLinearLayout;
-    LayoutParams linearLayoutParams;
-    LayoutParams exerciseTextParams;
-    LayoutParams allWeightTextParams;
-    LayoutParams repNumParams;
-    LayoutParams exerciseStatParams;
-    LayoutParams exercisePrevParams;
+    LayoutParams linearLayoutParams = new LayoutParams(-1, -2, 1);
+    LayoutParams exerciseTextParams = new LayoutParams(-2, -1);
+    LayoutParams allWeightTextParams = new LayoutParams(-2, -1);
+    LayoutParams repNumParams = new LayoutParams(0, -1, 1);
+    LayoutParams exercisePrevParams = new LayoutParams(0, -1, 4);
+    LayoutParams exerciseStatParams = new LayoutParams(0, -1, 3);
 
     public static final String EXTRA_DAY = "com.buinvent.jurassic_gains.DAY";
     public static final String WORKOUT_PREFERENCES = "WORKOUT_PREFERENCES";
@@ -36,27 +36,25 @@ public class WorkoutActivity extends AppCompatActivity {
     String previousWeight;
     String previousReps;
 
+    Intent dayNumIntent;
+    String weekExtra;
+    String dayExtra;
+    TextView topText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
 
-        linearLayoutParams = new LayoutParams(-1, -2, 1);
-        exerciseTextParams = new LayoutParams(-2, -1);
-        allWeightTextParams = new LayoutParams(-2, -1);
-        allWeightTextParams.setMargins(100, 0, 0,0);
-        repNumParams = new LayoutParams(0, -1, 1);
-        exercisePrevParams = new LayoutParams(0, -1, 4);
-        exerciseStatParams = new LayoutParams(0, -1, 3);
-
-        Intent dayNumIntent = getIntent();
-        String weekExtra = dayNumIntent.getStringExtra(DayActivity.EXTRA_WEEK);
-        String dayExtra = dayNumIntent.getStringExtra(EXTRA_DAY);
-        TextView topText = findViewById(R.id.dayText);
-        topText.setText(dayExtra);
-
         mLinearLayout = findViewById(R.id.workout_layout);
         workoutPreferences = getSharedPreferences(WORKOUT_PREFERENCES, Context.MODE_PRIVATE);
+        dayNumIntent = getIntent();
+        weekExtra = dayNumIntent.getStringExtra(DayActivity.EXTRA_WEEK);
+        dayExtra = dayNumIntent.getStringExtra(EXTRA_DAY);
+        topText = findViewById(R.id.dayText);
+
+        topText.setText(dayExtra);
+        allWeightTextParams.setMargins(100, 0, 0,0);
 
         if(dayExtra.equals(getResources().getString(R.string.day1))){
             exercises = new String[]{"Bench Press", "Skull Crushers", "Flyes", "Incline Bench Press"};
@@ -149,10 +147,10 @@ public class WorkoutActivity extends AppCompatActivity {
                 previousText.setTextSize(16);
                 statLayout.addView(previousText, exercisePrevParams);
 
-                previousWeight = workoutPreferences.getString((Integer.valueOf(weekExtra) - 1) + exercises[iNum] + "weight" + (jNum+1), "No previous");
+                previousWeight = workoutPreferences.getString((Integer.valueOf(weekExtra) - 1) + exercises[iNum] + "weight" + (jNum+1), "None");
                 previousReps = workoutPreferences.getString((Integer.valueOf(weekExtra) - 1) + exercises[iNum] + "reps" + (jNum+1), "8");
-                if(previousWeight.equals("No previous"))
-                    previousText.setText("No Previous");
+                if(previousWeight.equals("None"))
+                    previousText.setText("None");
                 else
                     previousText.setText(previousWeight + " x " + previousReps);
 
