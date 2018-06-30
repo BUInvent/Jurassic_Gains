@@ -152,19 +152,30 @@ public class WorkoutActivity extends AppCompatActivity {
                 lbsInput[i][j].setGravity(Gravity.CENTER);
                 lbsInput[i][j].setTextSize(16);
                 lbsInput[i][j].setFilters(new InputFilter[]{ new InputFilter.LengthFilter(3)});
+                lbsInput[i][j].setText(workoutPreferences.getString(weekExtra + exercises[iNum] + "weight" + (jNum+1), ""));
                 statLayout.addView(lbsInput[i][j], exerciseStatParams);
 
                 EditText repsInput = new EditText(getApplicationContext());
                 repsInput.setInputType(InputType.TYPE_CLASS_NUMBER);
                 repsInput.setGravity(Gravity.CENTER);
                 repsInput.setTextSize(16);
-                repsInput.setText("8");
                 repsInput.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(2)});
+                repsInput.setText(workoutPreferences.getString(weekExtra + exercises[iNum] + "reps" + (jNum+1), "8"));
                 statLayout.addView(repsInput, exerciseStatParams);
 
                 mLinearLayout.addView(statLayout, linearLayoutParams);
 
-                lbsInput[i][j].setText(workoutPreferences.getString(weekExtra + exercises[iNum] + "weight" + (jNum+1), ""));
+                repsInput.addTextChangedListener(new TextWatcher() {
+                    @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    @Override public void afterTextChanged(Editable s) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        SharedPreferences.Editor editor = workoutPreferences.edit();
+                        editor.putString(weekExtra + exercises[iNum] + "reps" + (jNum+1), s.toString());
+                        editor.apply();
+                    }
+                });
 
                 lbsInput[i][j].addTextChangedListener(new TextWatcher() {
                     @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -188,10 +199,6 @@ public class WorkoutActivity extends AppCompatActivity {
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     for(int j=0; j<SET_NUM; j++)
                         lbsInput[iNum][j].setText(s);
-
-                    SharedPreferences.Editor editor = workoutPreferences.edit();
-                    editor.putString(weekExtra + exercises[iNum] + "allWeight", s.toString());
-                    editor.apply();
                 }
             });
 
