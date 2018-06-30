@@ -1,6 +1,8 @@
 package com.buinvent.jurassic_gains;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,8 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-import java.util.Arrays;
-
 public class WorkoutActivity extends AppCompatActivity {
 
     LinearLayout mLinearLayout;
@@ -27,10 +27,12 @@ public class WorkoutActivity extends AppCompatActivity {
     LayoutParams exercisePrevParams;
 
     public static final String EXTRA_DAY = "com.buinvent.jurassic_gains.DAY";
+    public static final String WORKOUT_PREFERENCES = "WORKOUT_PREFERENCES";
     public static final int SET_NUM = 3;
 
     String[] exercises;
     EditText[][] lbsInput;
+    SharedPreferences workoutPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +47,14 @@ public class WorkoutActivity extends AppCompatActivity {
         exercisePrevParams = new LayoutParams(0, -1, 4);
         exerciseStatParams = new LayoutParams(0, -1, 3);
 
-
         Intent dayNumIntent = getIntent();
+        String weekExtra = dayNumIntent.getStringExtra(DayActivity.EXTRA_WEEK);
         String dayExtra = dayNumIntent.getStringExtra(EXTRA_DAY);
         TextView topText = findViewById(R.id.dayText);
         topText.setText(dayExtra);
 
         mLinearLayout = findViewById(R.id.workout_layout);
+        workoutPreferences = getSharedPreferences(WORKOUT_PREFERENCES, Context.MODE_PRIVATE);
 
         if(dayExtra.equals(getResources().getString(R.string.day1))){
             exercises = new String[]{"Bench Press", "Skull Crushers", "Flyes", "Incline Bench Press"};
@@ -129,6 +132,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
             for(int j=0; j<SET_NUM; j++){
+                final int jNum = j;
                 LinearLayout statLayout = new LinearLayout(getApplicationContext());
                 statLayout.setOrientation(LinearLayout.HORIZONTAL);
 
@@ -160,6 +164,20 @@ public class WorkoutActivity extends AppCompatActivity {
 
                 mLinearLayout.addView(statLayout, linearLayoutParams);
 
+                lbsInput[i][j].setText(workoutPreferences.getString(weekExtra + exercises[iNum] + "weight" + (jNum+1), ""));
+
+                lbsInput[i][j].addTextChangedListener(new TextWatcher() {
+                    @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    @Override public void afterTextChanged(Editable s) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        SharedPreferences.Editor editor = workoutPreferences.edit();
+                        editor.putString(weekExtra + exercises[iNum] + "weight" + (jNum+1), s.toString());
+                        editor.apply();
+                    }
+                });
+
             }
 
             allWeightText.addTextChangedListener(new TextWatcher() {
@@ -171,6 +189,9 @@ public class WorkoutActivity extends AppCompatActivity {
                     for(int j=0; j<SET_NUM; j++)
                         lbsInput[iNum][j].setText(s);
 
+                    SharedPreferences.Editor editor = workoutPreferences.edit();
+                    editor.putString(weekExtra + exercises[iNum] + "allWeight", s.toString());
+                    editor.apply();
                 }
             });
 

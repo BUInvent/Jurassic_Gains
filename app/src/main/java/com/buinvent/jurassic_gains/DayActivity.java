@@ -56,13 +56,14 @@ public class DayActivity extends AppCompatActivity {
                 editor.apply();
             });
 
-            workoutDayButton[i].setOnClickListener(view -> setWorkout(workoutDayButton[iNum].getText().toString()));
+            workoutDayButton[i].setOnClickListener(view -> setWorkout(workoutDayButton[iNum].getText().toString(), weekExtra));
         }
     }
 
-    private void setWorkout(final String day){
+    private void setWorkout(final String day, final String week){
         Intent workout = new Intent(getApplicationContext(), WorkoutActivity.class);
         workout.putExtra(WorkoutActivity.EXTRA_DAY, day);
+        workout.putExtra(EXTRA_WEEK, week);
         startActivity(workout);
     }
 }
