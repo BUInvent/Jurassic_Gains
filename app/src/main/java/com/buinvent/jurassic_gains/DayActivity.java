@@ -63,7 +63,7 @@ public class DayActivity extends AppCompatActivity {
     private void setWorkout(final String day, final String week){
         Intent workout = new Intent(getApplicationContext(), WorkoutActivity.class);
         workout.putExtra(WorkoutActivity.EXTRA_DAY, day);
-        workout.putExtra(EXTRA_WEEK, week);
+        workout.putExtra(EXTRA_WEEK, week.substring(week.length() - 1));
         startActivity(workout);
     }
 }

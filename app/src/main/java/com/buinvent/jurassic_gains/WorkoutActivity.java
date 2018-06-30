@@ -33,6 +33,8 @@ public class WorkoutActivity extends AppCompatActivity {
     String[] exercises;
     EditText[][] lbsInput;
     SharedPreferences workoutPreferences;
+    String previousWeight;
+    String previousReps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,10 +144,17 @@ public class WorkoutActivity extends AppCompatActivity {
                 setNum.setGravity(Gravity.CENTER);
                 statLayout.addView(setNum, repNumParams);
 
-                TextView previousInput = new TextView(getApplicationContext());
-                previousInput.setGravity(Gravity.CENTER);
-                previousInput.setTextSize(16);
-                statLayout.addView(previousInput, exercisePrevParams);
+                TextView previousText = new TextView(getApplicationContext());
+                previousText.setGravity(Gravity.CENTER);
+                previousText.setTextSize(16);
+                statLayout.addView(previousText, exercisePrevParams);
+
+                previousWeight = workoutPreferences.getString((Integer.valueOf(weekExtra) - 1) + exercises[iNum] + "weight" + (jNum+1), "No previous");
+                previousReps = workoutPreferences.getString((Integer.valueOf(weekExtra) - 1) + exercises[iNum] + "reps" + (jNum+1), "8");
+                if(previousWeight.equals("No previous"))
+                    previousText.setText("No Previous");
+                else
+                    previousText.setText(previousWeight + " x " + previousReps);
 
                 lbsInput[i][j] = new EditText(getApplicationContext());
                 lbsInput[i][j].setInputType(InputType.TYPE_CLASS_NUMBER);
