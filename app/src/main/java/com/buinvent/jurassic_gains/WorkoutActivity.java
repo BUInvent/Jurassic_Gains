@@ -4,13 +4,17 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+
+import java.util.Arrays;
 
 public class WorkoutActivity extends AppCompatActivity {
 
@@ -23,7 +27,10 @@ public class WorkoutActivity extends AppCompatActivity {
     LayoutParams exercisePrevParams;
 
     public static final String EXTRA_DAY = "com.buinvent.jurassic_gains.DAY";
+    public static final int SET_NUM = 3;
+
     String[] exercises;
+    EditText[][] lbsInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +66,11 @@ public class WorkoutActivity extends AppCompatActivity {
             exercises = new String[]{"Shoulder Press", "Side Lateral Raise", "upright rows", "Seated Bent Over Flys"};
         }
 
+        lbsInput = new EditText[exercises.length][SET_NUM];
+
         for(int i = 0; i < exercises.length; i++){
 
+            final int iNum = i;
             LinearLayout workoutLayout = new LinearLayout(getApplicationContext());
             workoutLayout.setOrientation(LinearLayout.HORIZONTAL);
 
@@ -118,12 +128,12 @@ public class WorkoutActivity extends AppCompatActivity {
             mLinearLayout.addView(statLabelLayout, linearLayoutParams);
 
 
-            for(int j=1; j<=3; j++){
+            for(int j=0; j<SET_NUM; j++){
                 LinearLayout statLayout = new LinearLayout(getApplicationContext());
                 statLayout.setOrientation(LinearLayout.HORIZONTAL);
 
                 TextView setNum = new TextView(getApplicationContext());
-                setNum.setText(Integer.toString(j));
+                setNum.setText(Integer.toString(j+1));
                 setNum.setTextSize(16);
                 setNum.setGravity(Gravity.CENTER);
                 statLayout.addView(setNum, repNumParams);
@@ -133,12 +143,12 @@ public class WorkoutActivity extends AppCompatActivity {
                 previousInput.setTextSize(16);
                 statLayout.addView(previousInput, exercisePrevParams);
 
-                EditText lbsInput = new EditText(getApplicationContext());
-                lbsInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-                lbsInput.setGravity(Gravity.CENTER);
-                lbsInput.setTextSize(16);
-                lbsInput.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(3)});
-                statLayout.addView(lbsInput, exerciseStatParams);
+                lbsInput[i][j] = new EditText(getApplicationContext());
+                lbsInput[i][j].setInputType(InputType.TYPE_CLASS_NUMBER);
+                lbsInput[i][j].setGravity(Gravity.CENTER);
+                lbsInput[i][j].setTextSize(16);
+                lbsInput[i][j].setFilters(new InputFilter[]{ new InputFilter.LengthFilter(3)});
+                statLayout.addView(lbsInput[i][j], exerciseStatParams);
 
                 EditText repsInput = new EditText(getApplicationContext());
                 repsInput.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -151,6 +161,18 @@ public class WorkoutActivity extends AppCompatActivity {
                 mLinearLayout.addView(statLayout, linearLayoutParams);
 
             }
+
+            allWeightText.addTextChangedListener(new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override public void afterTextChanged(Editable s) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    for(int j=0; j<SET_NUM; j++)
+                        lbsInput[iNum][j].setText(s);
+
+                }
+            });
 
         }
 
