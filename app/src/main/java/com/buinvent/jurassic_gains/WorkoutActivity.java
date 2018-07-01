@@ -22,57 +22,28 @@ public class WorkoutActivity extends AppCompatActivity {
     public static final String WORKOUT_PREFERENCES = "WORKOUT_PREFERENCES";
     public static final int SET_NUM = 3;
 
-    LayoutParams linearLayoutParams = new LayoutParams(-1, -2, 1);
-    LayoutParams exerciseTextParams = new LayoutParams(-2, -1);
-    LayoutParams allWeightTextParams = new LayoutParams(-2, -1);
-    LayoutParams repNumParams = new LayoutParams(0, -1, 1);
-    LayoutParams exercisePrevParams = new LayoutParams(0, -1, 4);
-    LayoutParams exerciseStatParams = new LayoutParams(0, -1, 3);
-
-    LinearLayout mLinearLayout;
-    LinearLayout workoutLayout;
-    LinearLayout statLabelLayout;
-    LinearLayout statLayout;
-
-    EditText[][] lbsInput;
-    EditText allWeightText;
-    EditText repsInput;
-
-    TextView topText;
-    TextView exerciseText;
-    TextView hash;
-    TextView previous;
-    TextView reps;
-    TextView previousText;
-
-    String[] exercises;
-    String previousWeight;
-    String previousReps;
-    String weekExtra;
-    String dayExtra;
-
-    SharedPreferences workoutPreferences;
-    SharedPreferences.Editor editor;
-
-    Intent dayNumIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout);
 
-        mLinearLayout = findViewById(R.id.workout_layout);
-        workoutPreferences = getSharedPreferences(WORKOUT_PREFERENCES, Context.MODE_PRIVATE);
-        dayNumIntent = getIntent();
-        weekExtra = dayNumIntent.getStringExtra(DayActivity.EXTRA_WEEK);
-        dayExtra = dayNumIntent.getStringExtra(EXTRA_DAY);
-        topText = findViewById(R.id.dayText);
-        editor = workoutPreferences.edit();
-        String temp;
+        Intent dayNumIntent = getIntent();
+        String weekExtra = dayNumIntent.getStringExtra(DayActivity.EXTRA_WEEK);
+        String dayExtra = dayNumIntent.getStringExtra(EXTRA_DAY);
 
+        LayoutParams linearLayoutParams = new LayoutParams(-1, -2, 1);
+        LayoutParams exerciseTextParams = new LayoutParams(-2, -1);
+        LayoutParams allWeightTextParams = new LayoutParams(-2, -1);
+        LayoutParams repNumParams = new LayoutParams(0, -1, 1);
+        LayoutParams exercisePrevParams = new LayoutParams(0, -1, 4);
+        LayoutParams exerciseStatParams = new LayoutParams(0, -1, 3);
+
+        TextView topText = findViewById(R.id.dayText);
         topText.setText(dayExtra);
         allWeightTextParams.setMargins(100, 0, 0,0);
 
+        String[] exercises;
         if(dayExtra.equals(getResources().getString(R.string.day1))){
             exercises = new String[]{"Bench Press", "Skull Crushers", "Flyes", "Incline Bench Press"};
         }
@@ -85,20 +56,22 @@ public class WorkoutActivity extends AppCompatActivity {
         else if(dayExtra.equals(getResources().getString(R.string.day5))){
             exercises = new String[]{"Shoulder Press", "Side Lateral Raise", "upright rows", "Seated Bent Over Flys"};
         }
+        else{ exercises = new String[0]; }
 
-        lbsInput = new EditText[exercises.length][SET_NUM];
+        EditText[][] lbsInput = new EditText[exercises.length][SET_NUM];
 
         for(int i = 0; i < exercises.length; i++){
 
             final int iNum = i;
-            workoutLayout = new LinearLayout(getApplicationContext());
+            LinearLayout mLinearLayout = findViewById(R.id.workout_layout);
+            LinearLayout workoutLayout = new LinearLayout(getApplicationContext());
             workoutLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-            exerciseText = defaultTextView(exercises[i], 20);
+            TextView exerciseText = defaultTextView(exercises[i], 20);
             exerciseText.setTypeface(Typeface.DEFAULT_BOLD);
             workoutLayout.addView(exerciseText, exerciseTextParams);
 
-            allWeightText = defaultEditText("", 14, 2);
+            EditText allWeightText = defaultEditText("", 14, 2);
             allWeightText.setWidth(100);
             workoutLayout.addView(allWeightText, allWeightTextParams);
 
@@ -106,7 +79,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
             mLinearLayout.addView(workoutLayout, linearLayoutParams);
 
-            statLabelLayout = new LinearLayout(getApplicationContext());
+            LinearLayout statLabelLayout = new LinearLayout(getApplicationContext());
             statLabelLayout.setOrientation(LinearLayout.HORIZONTAL);
 
             statLabelLayout.addView(defaultTextView(getResources().getString(R.string.hash), 16), repNumParams);
@@ -120,31 +93,33 @@ public class WorkoutActivity extends AppCompatActivity {
             for(int j=0; j<SET_NUM; j++){
 
                 final int jNum = j;
-                statLayout = new LinearLayout(getApplicationContext());
+                LinearLayout statLayout = new LinearLayout(getApplicationContext());
                 statLayout.setOrientation(LinearLayout.HORIZONTAL);
 
                 statLayout.addView(defaultTextView(Integer.toString(j+1), 16), repNumParams);
 
-                previousText = defaultTextView("", 16);
+                TextView previousText = defaultTextView("", 16);
                 statLayout.addView(previousText, exercisePrevParams);
 
-                previousWeight = workoutPreferences.getString((Integer.valueOf(weekExtra) - 1) + exercises[iNum] + "weight" + (jNum+1), "None");
-                previousReps = workoutPreferences.getString((Integer.valueOf(weekExtra) - 1) + exercises[iNum] + "reps" + (jNum+1), "8");
+                SharedPreferences workoutPreferences = getSharedPreferences(WORKOUT_PREFERENCES, Context.MODE_PRIVATE);
+                String previousWeight = workoutPreferences.getString((Integer.valueOf(weekExtra) - 1) + exercises[iNum] + "weight" + (jNum+1), "None");
+                String previousReps = workoutPreferences.getString((Integer.valueOf(weekExtra) - 1) + exercises[iNum] + "reps" + (jNum+1), "8");
                 if(previousWeight.equals("None"))
                     previousText.setText("None");
                 else
                     previousText.setText(previousWeight + " x " + previousReps);
 
-                temp = workoutPreferences.getString(weekExtra + exercises[iNum] + "weight" + (jNum+1), "");
+                String temp = workoutPreferences.getString(weekExtra + exercises[iNum] + "weight" + (jNum+1), "");
                 lbsInput[i][j] = defaultEditText(temp, 16, 3);
                 statLayout.addView(lbsInput[i][j], exerciseStatParams);
 
                 temp = workoutPreferences.getString(weekExtra + exercises[iNum] + "reps" + (jNum+1), "8");
-                repsInput = defaultEditText(temp, 16, 3);
+                EditText repsInput = defaultEditText(temp, 16, 3);
                 statLayout.addView(repsInput, exerciseStatParams);
 
                 mLinearLayout.addView(statLayout, linearLayoutParams);
 
+                SharedPreferences.Editor editor = workoutPreferences.edit();
                 repsInput.addTextChangedListener(new TextWatcher() {
                     @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                     @Override public void afterTextChanged(Editable s) {}
@@ -162,7 +137,6 @@ public class WorkoutActivity extends AppCompatActivity {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        SharedPreferences.Editor editor = workoutPreferences.edit();
                         editor.putString(weekExtra + exercises[iNum] + "weight" + (jNum+1), s.toString());
                         editor.apply();
                     }
