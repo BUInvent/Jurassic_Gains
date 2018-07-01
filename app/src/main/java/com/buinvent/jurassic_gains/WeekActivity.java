@@ -15,11 +15,6 @@ import android.content.Context;
 
 public class WeekActivity extends AppCompatActivity {
 
-    LinearLayout mLinearLayout;
-    LayoutParams weekLayoutParams;
-    LayoutParams checkBoxLayoutParams;
-    LayoutParams buttonLayoutParams;
-
     public static final int WEEKS_NUM = 12;
     public static final String WEEK_PREFERENCES = "WEEK_PREFERENCES";
 
@@ -30,12 +25,12 @@ public class WeekActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_week);
 
-        mLinearLayout = findViewById(R.id.week_layout);
+        LinearLayout mLinearLayout = findViewById(R.id.week_layout);
         weekPreferences = getSharedPreferences(WEEK_PREFERENCES, Context.MODE_PRIVATE);
 
-        weekLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, 0, 1);
-        checkBoxLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
-        buttonLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        LayoutParams weekLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, 0, 1);
+        LayoutParams checkBoxLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+        LayoutParams buttonLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 
         CheckBox[] checkBoxes = new CheckBox[WEEKS_NUM];
         Button[] buttons = new Button[WEEKS_NUM];
@@ -51,11 +46,6 @@ public class WeekActivity extends AppCompatActivity {
             checkBoxes[i].setScaleY((float)1.3);
             weekLayout.addView(checkBoxes[i], checkBoxLayoutParams);
 
-            if(!weekPreferences.contains("checkbox_week" + Integer.toString(i+1))){
-                SharedPreferences.Editor editor = weekPreferences.edit();
-                editor.putBoolean("checkbox_week" + Integer.toString(i+1), false);
-                editor.commit();
-            }
             checkBoxes[i].setChecked(weekPreferences.getBoolean("checkbox_week" + Integer.toString(i+1), false));
 
             buttons[i] = new Button(getApplicationContext());
