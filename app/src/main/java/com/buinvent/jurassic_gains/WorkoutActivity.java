@@ -68,6 +68,7 @@ public class WorkoutActivity extends AppCompatActivity {
         dayExtra = dayNumIntent.getStringExtra(EXTRA_DAY);
         topText = findViewById(R.id.dayText);
         editor = workoutPreferences.edit();
+        String temp;
 
         topText.setText(dayExtra);
         allWeightTextParams.setMargins(100, 0, 0,0);
@@ -93,22 +94,13 @@ public class WorkoutActivity extends AppCompatActivity {
             workoutLayout = new LinearLayout(getApplicationContext());
             workoutLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-            //
-            exerciseText = new TextView(getApplicationContext());
-            exerciseText.setText(exercises[i]);
-            exerciseText.setTextSize(20);
+            exerciseText = defaultTextView(exercises[i], 20);
             exerciseText.setTypeface(Typeface.DEFAULT_BOLD);
-            exerciseText.setGravity(Gravity.CENTER);
             workoutLayout.addView(exerciseText, exerciseTextParams);
 
-            allWeightText = new EditText(getApplicationContext());
-            allWeightText.setInputType(InputType.TYPE_CLASS_NUMBER);
+            allWeightText = defaultEditText("", 14, 2);
             allWeightText.setWidth(100);
-            allWeightText.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(3)});
-            allWeightText.setTextSize(14);
-            allWeightText.setGravity(Gravity.CENTER);
             workoutLayout.addView(allWeightText, allWeightTextParams);
-
 
             workoutLayout.addView(defaultTextView(getResources().getString(R.string.pounds), 16), exerciseTextParams);
 
@@ -126,6 +118,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
 
             for(int j=0; j<SET_NUM; j++){
+
                 final int jNum = j;
                 statLayout = new LinearLayout(getApplicationContext());
                 statLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -142,20 +135,12 @@ public class WorkoutActivity extends AppCompatActivity {
                 else
                     previousText.setText(previousWeight + " x " + previousReps);
 
-                lbsInput[i][j] = new EditText(getApplicationContext());
-                lbsInput[i][j].setInputType(InputType.TYPE_CLASS_NUMBER);
-                lbsInput[i][j].setGravity(Gravity.CENTER);
-                lbsInput[i][j].setTextSize(16);
-                lbsInput[i][j].setFilters(new InputFilter[]{ new InputFilter.LengthFilter(3)});
-                lbsInput[i][j].setText(workoutPreferences.getString(weekExtra + exercises[iNum] + "weight" + (jNum+1), ""));
+                temp = workoutPreferences.getString(weekExtra + exercises[iNum] + "weight" + (jNum+1), "");
+                lbsInput[i][j] = defaultEditText(temp, 16, 3);
                 statLayout.addView(lbsInput[i][j], exerciseStatParams);
 
-                repsInput = new EditText(getApplicationContext());
-                repsInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-                repsInput.setGravity(Gravity.CENTER);
-                repsInput.setTextSize(16);
-                repsInput.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(2)});
-                repsInput.setText(workoutPreferences.getString(weekExtra + exercises[iNum] + "reps" + (jNum+1), "8"));
+                temp = workoutPreferences.getString(weekExtra + exercises[iNum] + "reps" + (jNum+1), "8");
+                repsInput = defaultEditText(temp, 16, 3);
                 statLayout.addView(repsInput, exerciseStatParams);
 
                 mLinearLayout.addView(statLayout, linearLayoutParams);
@@ -206,6 +191,16 @@ public class WorkoutActivity extends AppCompatActivity {
         textView.setGravity(Gravity.CENTER);
         textView.setTextSize(textSize);
         return textView;
+    }
+
+    private EditText defaultEditText (String text, int textSize, int maxLength){
+        EditText editText = new EditText(getApplicationContext());
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        editText.setGravity(Gravity.CENTER);
+        editText.setTextSize(textSize);
+        editText.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(maxLength)});
+        editText.setText(text);
+        return editText;
     }
 
 }
