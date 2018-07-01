@@ -18,8 +18,10 @@ import android.widget.TextView;
 
 public class WorkoutActivity extends AppCompatActivity {
 
-    LinearLayout mLinearLayout;
-    LinearLayout workoutLayout;
+    public static final String EXTRA_DAY = "com.buinvent.jurassic_gains.DAY";
+    public static final String WORKOUT_PREFERENCES = "WORKOUT_PREFERENCES";
+    public static final int SET_NUM = 3;
+
     LayoutParams linearLayoutParams = new LayoutParams(-1, -2, 1);
     LayoutParams exerciseTextParams = new LayoutParams(-2, -1);
     LayoutParams allWeightTextParams = new LayoutParams(-2, -1);
@@ -27,33 +29,32 @@ public class WorkoutActivity extends AppCompatActivity {
     LayoutParams exercisePrevParams = new LayoutParams(0, -1, 4);
     LayoutParams exerciseStatParams = new LayoutParams(0, -1, 3);
 
-    public static final String EXTRA_DAY = "com.buinvent.jurassic_gains.DAY";
-    public static final String WORKOUT_PREFERENCES = "WORKOUT_PREFERENCES";
-    public static final int SET_NUM = 3;
+    LinearLayout mLinearLayout;
+    LinearLayout workoutLayout;
+    LinearLayout statLabelLayout;
+    LinearLayout statLayout;
 
-    String[] exercises;
     EditText[][] lbsInput;
-    SharedPreferences workoutPreferences;
-    String previousWeight;
-    String previousReps;
+    EditText allWeightText;
+    EditText repsInput;
 
-    Intent dayNumIntent;
-    String weekExtra;
-    String dayExtra;
     TextView topText;
     TextView exerciseText;
-    EditText allWeightText;
-    TextView lbsText;
-    LinearLayout statLabelLayout;
     TextView hash;
     TextView previous;
-    TextView lbs;
     TextView reps;
-    LinearLayout statLayout;
-    TextView setNum;
     TextView previousText;
-    EditText repsInput;
+
+    String[] exercises;
+    String previousWeight;
+    String previousReps;
+    String weekExtra;
+    String dayExtra;
+
+    SharedPreferences workoutPreferences;
     SharedPreferences.Editor editor;
+
+    Intent dayNumIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,7 @@ public class WorkoutActivity extends AppCompatActivity {
             workoutLayout = new LinearLayout(getApplicationContext());
             workoutLayout.setOrientation(LinearLayout.HORIZONTAL);
 
+            //
             exerciseText = new TextView(getApplicationContext());
             exerciseText.setText(exercises[i]);
             exerciseText.setTextSize(20);
@@ -107,40 +109,18 @@ public class WorkoutActivity extends AppCompatActivity {
             allWeightText.setGravity(Gravity.CENTER);
             workoutLayout.addView(allWeightText, allWeightTextParams);
 
-            lbsText = new TextView(getApplicationContext());
-            lbsText.setText(getResources().getString(R.string.pounds));
-            lbsText.setTextSize(16);
-            lbsText.setGravity(Gravity.CENTER);
-            workoutLayout.addView(lbsText, exerciseTextParams);
+
+            workoutLayout.addView(defaultTextView(getResources().getString(R.string.pounds), 16), exerciseTextParams);
 
             mLinearLayout.addView(workoutLayout, linearLayoutParams);
 
             statLabelLayout = new LinearLayout(getApplicationContext());
             statLabelLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-            hash = new TextView(getApplicationContext());
-            hash.setText(getResources().getString(R.string.hash));
-            hash.setTextSize(20);
-            hash.setGravity(Gravity.CENTER);
-            statLabelLayout.addView(hash, repNumParams);
-
-            previous = new TextView(getApplicationContext());
-            previous.setText(getResources().getString(R.string.previous));
-            previous.setGravity(Gravity.CENTER);
-            previous.setTextSize(16);
-            statLabelLayout.addView(previous, exercisePrevParams);
-
-            lbs = new TextView(getApplicationContext());
-            lbs.setText(getResources().getString(R.string.pounds));
-            lbs.setGravity(Gravity.CENTER);
-            lbs.setTextSize(16);
-            statLabelLayout.addView(lbs, exerciseStatParams);
-
-            reps = new TextView(getApplicationContext());
-            reps.setText(getResources().getString(R.string.reps));
-            reps.setGravity(Gravity.CENTER);
-            reps.setTextSize(16);
-            statLabelLayout.addView(reps, exerciseStatParams);
+            statLabelLayout.addView(defaultTextView(getResources().getString(R.string.hash), 16), repNumParams);
+            statLabelLayout.addView(defaultTextView(getResources().getString(R.string.previous), 16), exercisePrevParams);
+            statLabelLayout.addView(defaultTextView(getResources().getString(R.string.pounds), 16), exerciseStatParams);
+            statLabelLayout.addView(defaultTextView(getResources().getString(R.string.reps), 16), exerciseStatParams);
 
             mLinearLayout.addView(statLabelLayout, linearLayoutParams);
 
@@ -150,15 +130,9 @@ public class WorkoutActivity extends AppCompatActivity {
                 statLayout = new LinearLayout(getApplicationContext());
                 statLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-                setNum = new TextView(getApplicationContext());
-                setNum.setText(Integer.toString(j+1));
-                setNum.setTextSize(16);
-                setNum.setGravity(Gravity.CENTER);
-                statLayout.addView(setNum, repNumParams);
+                statLayout.addView(defaultTextView(Integer.toString(j+1), 16), repNumParams);
 
-                previousText = new TextView(getApplicationContext());
-                previousText.setGravity(Gravity.CENTER);
-                previousText.setTextSize(16);
+                previousText = defaultTextView("", 16);
                 statLayout.addView(previousText, exercisePrevParams);
 
                 previousWeight = workoutPreferences.getString((Integer.valueOf(weekExtra) - 1) + exercises[iNum] + "weight" + (jNum+1), "None");
@@ -225,4 +199,13 @@ public class WorkoutActivity extends AppCompatActivity {
         }
 
     }
+
+    private TextView defaultTextView (String text, int textSize){
+        TextView textView = new TextView(getApplicationContext());
+        textView.setText(text);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextSize(textSize);
+        return textView;
+    }
+
 }
