@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -32,6 +33,11 @@ public class DayActivity extends AppCompatActivity {
                                     findViewById(R.id.checkbox_day4),
                                     findViewById(R.id.checkbox_day5)};
 
+        Button[] workoutDayButton = {findViewById(R.id.button_day1),
+                                     findViewById(R.id.button_day2),
+                                     findViewById(R.id.button_day4),
+                                     findViewById(R.id.button_day5)};
+
         for(int i = 0; i < workoutDayBox.length; i++){
 
             final String workoutDay = "checkbox_workout_day" + Integer.toString(i+1);
@@ -49,7 +55,15 @@ public class DayActivity extends AppCompatActivity {
                 editor.putBoolean(weekExtra + workoutDay, workoutDayBox[iNum].isChecked());
                 editor.apply();
             });
-        }
 
+            workoutDayButton[i].setOnClickListener(view -> setWorkout(workoutDayButton[iNum].getText().toString(), weekExtra));
+        }
+    }
+
+    private void setWorkout(final String day, final String week){
+        Intent workout = new Intent(getApplicationContext(), WorkoutActivity.class);
+        workout.putExtra(WorkoutActivity.EXTRA_DAY, day);
+        workout.putExtra(EXTRA_WEEK, week.substring(week.length() - 1));
+        startActivity(workout);
     }
 }
