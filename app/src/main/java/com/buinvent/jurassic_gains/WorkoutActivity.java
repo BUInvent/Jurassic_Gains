@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ScrollView;
 import android.widget.Space;
 import android.widget.TextView;
 
@@ -70,7 +71,7 @@ public class WorkoutActivity extends AppCompatActivity {
             LinearLayout subLinearLayout = new LinearLayout(getApplicationContext());
             subLinearLayout.setGravity(Gravity.CENTER);
             subLinearLayout.setOrientation(LinearLayout.VERTICAL);
-            subLinearLayout.setBackgroundColor(Color.WHITE);
+            subLinearLayout.setBackgroundColor(Color.DKGRAY);
 
             LinearLayout workoutLayout = new LinearLayout(getApplicationContext());
             workoutLayout.setOrientation(LinearLayout.HORIZONTAL);
