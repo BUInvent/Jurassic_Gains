@@ -20,6 +20,7 @@ public class DayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent weekNumIntent = getIntent();
         String weekExtra = weekNumIntent.getStringExtra(EXTRA_WEEK); // grab the week that was selected from the week activity
@@ -67,5 +68,11 @@ public class DayActivity extends AppCompatActivity {
         workout.putExtra(WorkoutActivity.EXTRA_DAY, day);
         workout.putExtra(EXTRA_WEEK, week.substring(week.length() - 1));
         startActivity(workout);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 }
