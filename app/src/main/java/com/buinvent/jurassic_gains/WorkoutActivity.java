@@ -3,6 +3,7 @@ package com.buinvent.jurassic_gains;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ public class WorkoutActivity extends AppCompatActivity {
         LayoutParams repNumParams = new LayoutParams(0, -1, 1);
         LayoutParams exercisePrevParams = new LayoutParams(0, -1, 4);
         LayoutParams exerciseStatParams = new LayoutParams(0, -1, 3);
+//        LayoutParams spaceLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1);
 
         TextView topText = findViewById(R.id.dayText);
         topText.setText(dayExtra);
@@ -60,13 +62,19 @@ public class WorkoutActivity extends AppCompatActivity {
         else{ exercises = new String[0]; }
 
         EditText[][] lbsInput = new EditText[exercises.length][SET_NUM];
+        LinearLayout mLinearLayout = findViewById(R.id.workout_layout);
 
         for(int i = 0; i < exercises.length; i++){
 
             final int iNum = i;
-            LinearLayout mLinearLayout = findViewById(R.id.workout_layout);
+            LinearLayout subLinearLayout = new LinearLayout(getApplicationContext());
+            subLinearLayout.setGravity(Gravity.CENTER);
+            subLinearLayout.setOrientation(LinearLayout.VERTICAL);
+            subLinearLayout.setBackgroundColor(Color.WHITE);
+
             LinearLayout workoutLayout = new LinearLayout(getApplicationContext());
             workoutLayout.setOrientation(LinearLayout.HORIZONTAL);
+            workoutLayout.addView(new Space(getApplicationContext()), 50, LayoutParams.MATCH_PARENT);
 
             TextView exerciseText = defaultTextView(exercises[i], 20);
             exerciseText.setTypeface(Typeface.DEFAULT_BOLD);
@@ -78,24 +86,28 @@ public class WorkoutActivity extends AppCompatActivity {
 
             workoutLayout.addView(defaultTextView(getResources().getString(R.string.pounds), 16), exerciseTextParams);
 
-            mLinearLayout.addView(workoutLayout, linearLayoutParams);
+            subLinearLayout.addView(workoutLayout, linearLayoutParams);
 
             LinearLayout statLabelLayout = new LinearLayout(getApplicationContext());
             statLabelLayout.setOrientation(LinearLayout.HORIZONTAL);
+            statLabelLayout.addView(new Space(getApplicationContext()), 30, LayoutParams.MATCH_PARENT);
 
             statLabelLayout.addView(defaultTextView(getResources().getString(R.string.hash), 16), repNumParams);
             statLabelLayout.addView(defaultTextView(getResources().getString(R.string.previous), 16), exercisePrevParams);
             statLabelLayout.addView(defaultTextView(getResources().getString(R.string.pounds), 16), exerciseStatParams);
             statLabelLayout.addView(defaultTextView(getResources().getString(R.string.reps), 16), exerciseStatParams);
+            statLabelLayout.addView(new Space(getApplicationContext()), 30, LayoutParams.MATCH_PARENT);
 
-            mLinearLayout.addView(statLabelLayout, linearLayoutParams);
+            subLinearLayout.addView(statLabelLayout, linearLayoutParams);
 
 
             for(int j=0; j<SET_NUM; j++){
 
                 final int jNum = j;
+                mLinearLayout.addView(new Space(getApplicationContext()), LayoutParams.MATCH_PARENT, 5);
                 LinearLayout statLayout = new LinearLayout(getApplicationContext());
                 statLayout.setOrientation(LinearLayout.HORIZONTAL);
+                statLayout.addView(new Space(getApplicationContext()), 30, LayoutParams.MATCH_PARENT);
 
                 statLayout.addView(defaultTextView(Integer.toString(j+1), 16), repNumParams);
 
@@ -117,8 +129,9 @@ public class WorkoutActivity extends AppCompatActivity {
                 temp = workoutPreferences.getString(weekExtra + exercises[iNum] + "reps" + (jNum+1), "8");
                 EditText repsInput = defaultEditText(temp, 16, 2);
                 statLayout.addView(repsInput, exerciseStatParams);
+                statLayout.addView(new Space(getApplicationContext()), 30, LayoutParams.MATCH_PARENT);
 
-                mLinearLayout.addView(statLayout, linearLayoutParams);
+                subLinearLayout.addView(statLayout, linearLayoutParams);
 
                 SharedPreferences.Editor editor = workoutPreferences.edit();
                 repsInput.addTextChangedListener(new TextWatcher() {
@@ -145,6 +158,8 @@ public class WorkoutActivity extends AppCompatActivity {
 
             }
 
+            mLinearLayout.addView(subLinearLayout, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+
             allWeightText.addTextChangedListener(new TextWatcher() {
                 @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                 @Override public void afterTextChanged(Editable s) {}
@@ -155,9 +170,6 @@ public class WorkoutActivity extends AppCompatActivity {
                         lbsInput[iNum][j].setText(s);
                 }
             });
-
-            Space space = new Space(getApplicationContext());
-            mLinearLayout.addView(space, LayoutParams.MATCH_PARENT, 150);
 
         }
 
