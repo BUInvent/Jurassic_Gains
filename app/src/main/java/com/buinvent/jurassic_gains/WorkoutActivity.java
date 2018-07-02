@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.Space;
 import android.widget.TextView;
 
 public class WorkoutActivity extends AppCompatActivity {
@@ -71,7 +72,7 @@ public class WorkoutActivity extends AppCompatActivity {
             exerciseText.setTypeface(Typeface.DEFAULT_BOLD);
             workoutLayout.addView(exerciseText, exerciseTextParams);
 
-            EditText allWeightText = defaultEditText("", 14, 2);
+            EditText allWeightText = defaultEditText("", 14, 3);
             allWeightText.setWidth(100);
             workoutLayout.addView(allWeightText, allWeightTextParams);
 
@@ -114,7 +115,7 @@ public class WorkoutActivity extends AppCompatActivity {
                 statLayout.addView(lbsInput[i][j], exerciseStatParams);
 
                 temp = workoutPreferences.getString(weekExtra + exercises[iNum] + "reps" + (jNum+1), "8");
-                EditText repsInput = defaultEditText(temp, 16, 3);
+                EditText repsInput = defaultEditText(temp, 16, 2);
                 statLayout.addView(repsInput, exerciseStatParams);
 
                 mLinearLayout.addView(statLayout, linearLayoutParams);
@@ -154,6 +155,9 @@ public class WorkoutActivity extends AppCompatActivity {
                         lbsInput[iNum][j].setText(s);
                 }
             });
+
+            Space space = new Space(getApplicationContext());
+            mLinearLayout.addView(space, LayoutParams.MATCH_PARENT, 150);
 
         }
 
