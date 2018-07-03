@@ -44,7 +44,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
         TextView topText = findViewById(R.id.dayText);
         topText.setText(dayExtra);
-        allWeightTextParams.setMargins(100, 0, 0,0);
+        allWeightTextParams.setMargins(50, 0, 0, 0);
 
         String[] exercises;
         if(dayExtra.equals(getResources().getString(R.string.day1))){
@@ -57,7 +57,7 @@ public class WorkoutActivity extends AppCompatActivity {
             exercises = new String[]{"Squats", "Leg Extensions", "Leg Curls", "Calf Raises"};
         }
         else if(dayExtra.equals(getResources().getString(R.string.day5))){
-            exercises = new String[]{"Shoulder Press", "Side Lateral Raise", "upright rows", "Seated Bent Over Flys"};
+            exercises = new String[]{"Shoulder Press", "Side Lateral Raise", "Upright Rows", "Seated Bent Over Flys"};
         }
         else{ exercises = new String[0]; }
 
@@ -74,9 +74,9 @@ public class WorkoutActivity extends AppCompatActivity {
 
             LinearLayout workoutLayout = new LinearLayout(this);
             workoutLayout.setOrientation(LinearLayout.HORIZONTAL);
-            workoutLayout.addView(new Space(this), 50, LayoutParams.MATCH_PARENT);
+            workoutLayout.addView(new Space(this), 40, LayoutParams.MATCH_PARENT);
 
-            TextView exerciseText = defaultTextView(exercises[i], 20);
+            TextView exerciseText = defaultTextView(exercises[i], 18);
             exerciseText.setTypeface(Typeface.DEFAULT_BOLD);
             workoutLayout.addView(exerciseText, exerciseTextParams);
 
