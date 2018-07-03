@@ -69,14 +69,14 @@ public class WorkoutActivity extends AppCompatActivity {
         for(int i = 0; i < exercises.length; i++){
 
             final int iNum = i;
-            LinearLayout subLinearLayout = new LinearLayout(getApplicationContext());
+            LinearLayout subLinearLayout = new LinearLayout(this);
             subLinearLayout.setGravity(Gravity.CENTER);
             subLinearLayout.setOrientation(LinearLayout.VERTICAL);
             subLinearLayout.setBackgroundColor(Color.DKGRAY);
 
-            LinearLayout workoutLayout = new LinearLayout(getApplicationContext());
+            LinearLayout workoutLayout = new LinearLayout(this);
             workoutLayout.setOrientation(LinearLayout.HORIZONTAL);
-            workoutLayout.addView(new Space(getApplicationContext()), 50, LayoutParams.MATCH_PARENT);
+            workoutLayout.addView(new Space(this), 50, LayoutParams.MATCH_PARENT);
 
             TextView exerciseText = defaultTextView(exercises[i], 20);
             exerciseText.setTypeface(Typeface.DEFAULT_BOLD);
@@ -90,15 +90,15 @@ public class WorkoutActivity extends AppCompatActivity {
 
             subLinearLayout.addView(workoutLayout, linearLayoutParams);
 
-            LinearLayout statLabelLayout = new LinearLayout(getApplicationContext());
+            LinearLayout statLabelLayout = new LinearLayout(this);
             statLabelLayout.setOrientation(LinearLayout.HORIZONTAL);
-            statLabelLayout.addView(new Space(getApplicationContext()), 30, LayoutParams.MATCH_PARENT);
+            statLabelLayout.addView(new Space(this), 30, LayoutParams.MATCH_PARENT);
 
             statLabelLayout.addView(defaultTextView(getResources().getString(R.string.hash), 16), repNumParams);
             statLabelLayout.addView(defaultTextView(getResources().getString(R.string.previous), 16), exercisePrevParams);
             statLabelLayout.addView(defaultTextView(getResources().getString(R.string.pounds), 16), exerciseStatParams);
             statLabelLayout.addView(defaultTextView(getResources().getString(R.string.reps), 16), exerciseStatParams);
-            statLabelLayout.addView(new Space(getApplicationContext()), 30, LayoutParams.MATCH_PARENT);
+            statLabelLayout.addView(new Space(this), 30, LayoutParams.MATCH_PARENT);
 
             subLinearLayout.addView(statLabelLayout, linearLayoutParams);
 
@@ -106,10 +106,10 @@ public class WorkoutActivity extends AppCompatActivity {
             for(int j=0; j<SET_NUM; j++){
 
                 final int jNum = j;
-                mLinearLayout.addView(new Space(getApplicationContext()), LayoutParams.MATCH_PARENT, 5);
-                LinearLayout statLayout = new LinearLayout(getApplicationContext());
+                mLinearLayout.addView(new Space(this), LayoutParams.MATCH_PARENT, 5);
+                LinearLayout statLayout = new LinearLayout(this);
                 statLayout.setOrientation(LinearLayout.HORIZONTAL);
-                statLayout.addView(new Space(getApplicationContext()), 30, LayoutParams.MATCH_PARENT);
+                statLayout.addView(new Space(this), 30, LayoutParams.MATCH_PARENT);
 
                 statLayout.addView(defaultTextView(Integer.toString(j+1), 16), repNumParams);
 
@@ -131,7 +131,7 @@ public class WorkoutActivity extends AppCompatActivity {
                 temp = workoutPreferences.getString(weekExtra + exercises[iNum] + "reps" + (jNum+1), "8");
                 EditText repsInput = defaultEditText(temp, 16, 2);
                 statLayout.addView(repsInput, exerciseStatParams);
-                statLayout.addView(new Space(getApplicationContext()), 30, LayoutParams.MATCH_PARENT);
+                statLayout.addView(new Space(this), 30, LayoutParams.MATCH_PARENT);
 
                 subLinearLayout.addView(statLayout, linearLayoutParams);
 
@@ -178,7 +178,7 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
     private TextView defaultTextView (String text, int textSize){
-        TextView textView = new TextView(getApplicationContext());
+        TextView textView = new TextView(this);
         textView.setText(text);
         textView.setGravity(Gravity.CENTER);
         textView.setTextSize(textSize);
@@ -186,7 +186,7 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
     private EditText defaultEditText (String text, int textSize, int maxLength){
-        EditText editText = new EditText(getApplicationContext());
+        EditText editText = new EditText(this);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText.setGravity(Gravity.CENTER);
         editText.setTextSize(textSize);

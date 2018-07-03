@@ -3,6 +3,7 @@ package com.buinvent.jurassic_gains;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -38,11 +39,11 @@ public class WeekActivity extends AppCompatActivity {
 
         for (int i = 0; i < WEEKS_NUM; i++) {
 
-            LinearLayout weekLayout = new LinearLayout(getApplicationContext());
+            LinearLayout weekLayout = new LinearLayout(this);
             weekLayout.setOrientation(LinearLayout.HORIZONTAL);
 
             // Add checkbox for each week
-            checkBoxes[i] = new CheckBox(getApplicationContext());
+            checkBoxes[i] = new CheckBox(this);
             checkBoxes[i].setGravity(Gravity.CENTER);
             checkBoxes[i].setScaleX((float)1.3);
             checkBoxes[i].setScaleY((float)1.3);
@@ -52,7 +53,7 @@ public class WeekActivity extends AppCompatActivity {
             checkBoxes[i].setChecked(weekPreferences.getBoolean("checkbox_week" + Integer.toString(i+1), false));
 
             // Add a button and set the text for each week
-            buttons[i] = new Button(getApplicationContext());
+            buttons[i] = new Button(this);
             buttons[i].setTextSize(30);
             buttons[i].setGravity(Gravity.CENTER);
             String weekText = "Week " + String.valueOf(i + 1);
