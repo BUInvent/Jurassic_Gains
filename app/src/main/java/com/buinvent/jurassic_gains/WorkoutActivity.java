@@ -15,7 +15,6 @@ import android.view.Gravity;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.ScrollView;
 import android.widget.Space;
 import android.widget.TextView;
 
@@ -42,7 +41,6 @@ public class WorkoutActivity extends AppCompatActivity {
         LayoutParams repNumParams = new LayoutParams(0, -1, 1);
         LayoutParams exercisePrevParams = new LayoutParams(0, -1, 4);
         LayoutParams exerciseStatParams = new LayoutParams(0, -1, 3);
-//        LayoutParams spaceLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1);
 
         TextView topText = findViewById(R.id.dayText);
         topText.setText(dayExtra);
@@ -72,7 +70,7 @@ public class WorkoutActivity extends AppCompatActivity {
             LinearLayout subLinearLayout = new LinearLayout(this);
             subLinearLayout.setGravity(Gravity.CENTER);
             subLinearLayout.setOrientation(LinearLayout.VERTICAL);
-            subLinearLayout.setBackgroundColor(Color.DKGRAY);
+            subLinearLayout.setBackgroundColor(Color.parseColor("#595959"));
 
             LinearLayout workoutLayout = new LinearLayout(this);
             workoutLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -182,6 +180,7 @@ public class WorkoutActivity extends AppCompatActivity {
         textView.setText(text);
         textView.setGravity(Gravity.CENTER);
         textView.setTextSize(textSize);
+        textView.setTextColor(Color.WHITE);
         return textView;
     }
 
