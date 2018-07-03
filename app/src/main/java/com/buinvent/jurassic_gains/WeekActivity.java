@@ -55,7 +55,7 @@ public class WeekActivity extends AppCompatActivity {
             buttons[i] = new Button(this);
             buttons[i].setTextSize(30);
             buttons[i].setGravity(Gravity.CENTER);
-            String weekText = "Week " + String.valueOf(i + 1);
+            String weekText = "WEEK " + String.valueOf(i + 1);
             buttons[i].setText(weekText);
             // Set a click listener that will start the Day activity and send the week's text
             buttons[i].setOnClickListener(view -> setDay(weekText));
