@@ -12,11 +12,6 @@ import android.widget.LinearLayout.LayoutParams;
 import android.content.SharedPreferences;
 import android.content.Context;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-
 
 // Activity for the screen that gives users the ability to select the week they're training
 public class WeekActivity extends AppCompatActivity {
@@ -24,16 +19,9 @@ public class WeekActivity extends AppCompatActivity {
     public static final int WEEKS_NUM = 12;  // Number of weeks for training
     public static final String WEEK_PREFERENCES = "WEEK_PREFERENCES";
     SharedPreferences weekPreferences;
-    GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        System.out.println("Hello, " + account);
-//        updateUI(account);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_week);
