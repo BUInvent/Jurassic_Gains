@@ -1,14 +1,35 @@
 {
-    "providers": {
-        "awscloudformation": {
-            "AuthRoleName": "urassicains-20181213152702-authRole",
-            "UnauthRoleArn": "arn:aws:iam::238362556920:role/urassicains-20181213152702-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::238362556920:role/urassicains-20181213152702-authRole",
-            "Region": "us-east-2",
-            "DeploymentBucketName": "urassicains-20181213152702-deployment",
-            "UnauthRoleName": "urassicains-20181213152702-unauthRole",
-            "StackName": "urassicains-20181213152702",
-            "StackId": "arn:aws:cloudformation:us-east-2:238362556920:stack/urassicains-20181213152702/d522c400-ff1d-11e8-9a75-02a5f2ca138c"
-        }
-    }
+	"providers": {
+		"awscloudformation": {
+			"AuthRoleName": "urassicains-20181213152702-authRole",
+			"UnauthRoleArn": "arn:aws:iam::238362556920:role/urassicains-20181213152702-unauthRole",
+			"AuthRoleArn": "arn:aws:iam::238362556920:role/urassicains-20181213152702-authRole",
+			"Region": "us-east-2",
+			"DeploymentBucketName": "urassicains-20181213152702-deployment",
+			"UnauthRoleName": "urassicains-20181213152702-unauthRole",
+			"StackName": "urassicains-20181213152702",
+			"StackId": "arn:aws:cloudformation:us-east-2:238362556920:stack/urassicains-20181213152702/d522c400-ff1d-11e8-9a75-02a5f2ca138c"
+		}
+	},
+	"auth": {
+		"cognito74416dd5": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/urassicains-20181213152702-deployment/amplify-cfn-templates/auth/cognito74416dd5-cloudformation-template.yml",
+				"logicalId": "authcognito74416dd5"
+			},
+			"lastPushTimeStamp": "2018-12-13T21:33:21.117Z",
+			"output": {
+				"AppClientSecret": "btc8qsacfee555hfiq4h2ovhcsmdhdt3nj2ci8dn5mdvr4rl1rd",
+				"UserPoolId": "us-east-2_c1v6EEICu",
+				"AppClientIDWeb": "hcefi2saaeobb40ncp0jl6ret",
+				"AppClientID": "1hccd5qa4cuulauck5ovksuoif",
+				"IdentityPoolId": "us-east-2:1aab4e52-132c-4a0d-b54f-cfc9e20be00b",
+				"IdentityPoolName": "cognito74416dd5_identitypool_74416dd5",
+				"UserPoolName": "cognito74416dd5_userpool_74416dd5"
+			},
+			"lastPushDirHash": "VtGFqkfOJT7d15lDprbmTptRuIA="
+		}
+	}
 }
