@@ -23,7 +23,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -96,10 +95,18 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptSignIn();
                     return true;
                 }
                 return false;
+            }
+        });
+
+        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptSignIn();
             }
         });
 
@@ -292,7 +299,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         mEmailView.setAdapter(adapter);
     }
 
-    private void signIn(String email, String password) {
+    public void attemptSignIn() {
+
+        String email = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
+
         if (!isEmailValid(email) || !isPasswordValid(password)) return;
 
         mAuth.signInWithEmailAndPassword(email, password)
