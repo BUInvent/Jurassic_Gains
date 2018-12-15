@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.app.Activity;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,7 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends Activity {
+public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "YOUR-TAG-NAME";
 

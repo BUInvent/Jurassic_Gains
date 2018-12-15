@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.app.Activity;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,7 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 /**
  * A login screen that offers login via email/password.
  */
-public class SignupActivity extends Activity {
+public class SignupActivity extends AppCompatActivity {
 
     public static final String TAG = "YOUR-TAG-NAME";
 
@@ -39,6 +40,7 @@ public class SignupActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -107,6 +109,12 @@ public class SignupActivity extends Activity {
 
     private boolean isPasswordValid(String password) {
         return password.length() >= 6;
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        return true;
     }
 }
 

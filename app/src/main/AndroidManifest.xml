@@ -20,12 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SignupActivity"
+            android:label="@string/title_activity_signup" />
         <activity android:name=".WeekActivity" />
         <activity android:name=".DayActivity" />
         <activity android:name=".WorkoutActivity" />
-        <activity
-            android:name=".SignupActivity"
-            android:label="@string/title_activity_signup"></activity>
     </application>
 
 </manifest>
