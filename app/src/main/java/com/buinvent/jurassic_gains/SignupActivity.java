@@ -211,11 +211,15 @@ public class SignupActivity extends Activity implements LoaderCallbacks<Cursor> 
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        
+
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            Toast.makeText(SignupActivity.this, "Signed up successfully",
+                                    Toast.LENGTH_SHORT).show();
+
                             startActivity(new Intent(getApplicationContext(), WeekActivity.class));
 
                         } else {

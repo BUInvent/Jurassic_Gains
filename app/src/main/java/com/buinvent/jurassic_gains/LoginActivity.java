@@ -318,6 +318,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            Toast.makeText(LoginActivity.this, "Logged in successfully",
+                                    Toast.LENGTH_SHORT).show();
+
                             startActivity(new Intent(getApplicationContext(), WeekActivity.class));
 
                         } else {
