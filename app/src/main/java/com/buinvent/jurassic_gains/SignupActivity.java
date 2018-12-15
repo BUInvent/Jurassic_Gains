@@ -3,6 +3,7 @@ package com.buinvent.jurassic_gains;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 
@@ -199,28 +200,30 @@ public class SignupActivity extends Activity implements LoaderCallbacks<Cursor> 
     }
 
     public void createAccount(String email, String password) {
-        if (!isEmailValid(email) || !isPasswordValid(password)) return;
+
+        if (!isEmailValid(email) || !isPasswordValid(password)) {
+            Toast.makeText(SignupActivity.this, "Invalid email or password",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            System.out.println("User has been created = " + user);
-//                            updateUI(user);
+                            startActivity(new Intent(getApplicationContext(), WeekActivity.class));
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(SignupActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-//                            updateUI(null);
-                            System.out.println("failed to create user");
                         }
-
-                        // ...
                     }
                 });
 
@@ -228,7 +231,7 @@ public class SignupActivity extends Activity implements LoaderCallbacks<Cursor> 
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return (email.contains("@") && email.contains("."));
     }
 
     private boolean isPasswordValid(String password) {
