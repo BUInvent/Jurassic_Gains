@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         if (mAuth.getCurrentUser() != null){
-            Toast.makeText(LoginActivity.this, "Logged in successfully",
+            Toast.makeText(LoginActivity.this, "Logged in as " + mAuth.getCurrentUser().getEmail(),
                     Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getApplicationContext(), WeekActivity.class));
         }
@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            Toast.makeText(LoginActivity.this, "Logged in successfully",
+                            Toast.makeText(LoginActivity.this, "Logged in as " + user.getEmail(),
                                     Toast.LENGTH_SHORT).show();
 
                             startActivity(new Intent(getApplicationContext(), WeekActivity.class));
