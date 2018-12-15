@@ -12,6 +12,12 @@ import android.widget.LinearLayout.LayoutParams;
 import android.content.SharedPreferences;
 import android.content.Context;
 
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+
 
 // Activity for the screen that gives users the ability to select the week they're training
 public class WeekActivity extends AppCompatActivity {
@@ -44,12 +50,12 @@ public class WeekActivity extends AppCompatActivity {
             // Add checkbox for each week
             checkBoxes[i] = new CheckBox(this);
             checkBoxes[i].setGravity(Gravity.CENTER);
-            checkBoxes[i].setScaleX((float)1.3);
-            checkBoxes[i].setScaleY((float)1.3);
+            checkBoxes[i].setScaleX((float) 1.3);
+            checkBoxes[i].setScaleY((float) 1.3);
             weekLayout.addView(checkBoxes[i], checkBoxLayoutParams);
 
             // Set the checkbox to be checked or unchecked based on what was previously saved
-            checkBoxes[i].setChecked(weekPreferences.getBoolean("checkbox_week" + Integer.toString(i+1), false));
+            checkBoxes[i].setChecked(weekPreferences.getBoolean("checkbox_week" + Integer.toString(i + 1), false));
 
             // Add a button and set the text for each week
             buttons[i] = new Button(this);
@@ -59,23 +65,23 @@ public class WeekActivity extends AppCompatActivity {
             buttons[i].setText(weekText);
             // Set a click listener that will start the Day activity and send the week's text
             buttons[i].setOnClickListener(view -> setDay(weekText));
-            weekLayout.addView(buttons[i],buttonLayoutParams);
+            weekLayout.addView(buttons[i], buttonLayoutParams);
 
             // Do a checkbox listener if i > 1. This is because you need three checkboxes to run
             // this function (one before, one middle, and one after)
-            if(i > 1) {
-                checkBoxListener(i, checkBoxes[i-1], checkBoxes[i-2], checkBoxes[i], buttons[i]);
+            if (i > 1) {
+                checkBoxListener(i, checkBoxes[i - 1], checkBoxes[i - 2], checkBoxes[i], buttons[i]);
             }
 
             // If the previous checkbox wasn't checked, dis the checkbox and buttons
-            if (i != 0 && !checkBoxes[i-1].isChecked()) {
+            if (i != 0 && !checkBoxes[i - 1].isChecked()) {
                 checkBoxes[i].setEnabled(false);
                 buttons[i].setEnabled(false);
             }
 
             // Disable the previous checkbox if the checkbox is checked
             if (i != 0 && checkBoxes[i].isChecked())
-                checkBoxes[i-1].setEnabled(false);
+                checkBoxes[i - 1].setEnabled(false);
 
             mLinearLayout.addView(weekLayout, weekLayoutParams);
         }
@@ -83,15 +89,15 @@ public class WeekActivity extends AppCompatActivity {
         // Add checkbox listener for the first week's checkbox
         checkBoxListener(checkBoxes[0], checkBoxes[1], buttons[1]);
         // Add a checkbox listener for the last week's checkbox
-        checkBoxListener(checkBoxes[WEEKS_NUM-1], checkBoxes[WEEKS_NUM-2]);
+        checkBoxListener(checkBoxes[WEEKS_NUM - 1], checkBoxes[WEEKS_NUM - 2]);
 
     }
 
 
-//    This is for all weeks that are not first or last
+    //    This is for all weeks that are not first or last
     private void checkBoxListener(final int weekNum, final CheckBox currentCheckBox,
                                   final CheckBox previousCheckBox, final CheckBox nextCheckBox,
-                                  final Button nextButton){
+                                  final Button nextButton) {
 
         currentCheckBox.setOnClickListener((View v) -> {
             // Enable the next checkbox and button if the current checkbox gets checked, disable if vice versa
@@ -107,9 +113,9 @@ public class WeekActivity extends AppCompatActivity {
         });
     }
 
-//    This is for the first week since it doesn't have a previous week
+    //    This is for the first week since it doesn't have a previous week
     private void checkBoxListener(final CheckBox currentCheckBox,
-                                  final CheckBox nextCheckBox, final Button nextButton){
+                                  final CheckBox nextCheckBox, final Button nextButton) {
 
         currentCheckBox.setOnClickListener((View v) -> {
             nextCheckBox.setEnabled(currentCheckBox.isChecked());
@@ -121,8 +127,8 @@ public class WeekActivity extends AppCompatActivity {
         });
     }
 
-//    For the last week since it doesn't have a next week
-    private void checkBoxListener(final CheckBox currentCheckBox, final CheckBox previousCheckBox){
+    //    For the last week since it doesn't have a next week
+    private void checkBoxListener(final CheckBox currentCheckBox, final CheckBox previousCheckBox) {
 
         currentCheckBox.setOnClickListener((View v) -> {
             previousCheckBox.setEnabled(!currentCheckBox.isChecked());
@@ -134,10 +140,29 @@ public class WeekActivity extends AppCompatActivity {
     }
 
     // Function to start the Day Activity
-    private void setDay(final String week){
+    private void setDay(final String week) {
         Intent day = new Intent(getApplicationContext(), DayActivity.class);
         day.putExtra(DayActivity.EXTRA_WEEK, week); // Send the week so the day activity knows what week was selected
         startActivity(day);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.sign_out_button) {
+            FirebaseAuth.getInstance().signOut();
+            Toast.makeText(WeekActivity.this, "Logged out successfully",
+                    Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
