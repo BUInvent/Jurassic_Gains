@@ -217,7 +217,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() >= 6;
     }
 
     /**
@@ -304,7 +304,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        if (!isEmailValid(email) || !isPasswordValid(password)) return;
+        if (!isEmailValid(email) || !isPasswordValid(password)) {
+            Toast.makeText(LoginActivity.this, "Invalid email or password",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -314,16 +318,13 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            System.out.println("sign in success!, user = " + user);
-
                             startActivity(new Intent(getApplicationContext(), WeekActivity.class));
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-//                            updateUI(null);
-                            System.out.println("sign in failed!");
                         }
 
                         // ...
