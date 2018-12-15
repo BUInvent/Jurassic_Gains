@@ -38,9 +38,11 @@ public class LoginActivity extends Activity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        System.out.println("user is already logged in = " + currentUser);
-//        updateUI(currentUser);
+        if (mAuth.getCurrentUser() != null){
+            Toast.makeText(LoginActivity.this, "Logged in successfully",
+                    Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getApplicationContext(), WeekActivity.class));
+        }
     }
 
     @Override
