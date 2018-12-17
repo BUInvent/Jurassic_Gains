@@ -7,14 +7,13 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 
-import kotlinx.android.synthetic.main.activity_auth.*
 import android.widget.Toast
 
 
 
 class AuthActivity : Activity() {
 
-    final val RC_SIGN_IN = 123;
+    private val RC_SIGN_IN = 123
 
     val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
@@ -29,6 +28,8 @@ class AuthActivity : Activity() {
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
+                        .setLogo(R.drawable.jlogo)
+                        .setTheme(R.style.AppTheme)
                         .build(),
                 RC_SIGN_IN)
     }
@@ -48,12 +49,8 @@ class AuthActivity : Activity() {
                             Toast.LENGTH_SHORT).show()
 
                 startActivity(Intent(applicationContext, WeekActivity::class.java))
-                // ...
+
             } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                // ...
             }
         }
     }
