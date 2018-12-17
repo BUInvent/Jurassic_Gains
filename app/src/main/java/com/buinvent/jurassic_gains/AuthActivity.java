@@ -3,6 +3,7 @@ package com.buinvent.jurassic_gains;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -44,6 +45,13 @@ public class AuthActivity extends Activity {
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                if (user != null && user.getDisplayName() != null)
+                    Toast.makeText(AuthActivity.this, "Logged in as " + user.getDisplayName(),
+                                    Toast.LENGTH_SHORT).show();
+
+                startActivity(new Intent(getApplicationContext(), WeekActivity.class));
+
                 // ...
             } else {
                 // Sign in failed. If response is null the user canceled the
