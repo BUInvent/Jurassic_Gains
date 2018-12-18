@@ -24,11 +24,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +45,8 @@ public class WeekActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference userRef = db.collection("users");
     Query usersDataQuery = userRef.whereEqualTo("name", "Jason");
-    boolean weekCheck;
+
+    DocumentReference docRef = db.collection("users").document("2");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +58,19 @@ public class WeekActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
                     for(QueryDocumentSnapshot document: task.getResult()){
-                        Log.d("Got it dawg", document.getId() + " => " + document.getData());
+                        Log.d("data = ", document.getId() + " => " + document.getData());
 
-                        Arra weeks = document.getData().get("weeks");
-                        System.out.println("weeks will be = ");
-                        System.out.println(weeks[0]);
-//                        weekCheck = document.getData().get("weeks");
+                        Object data = document.getData();
+                        ArrayList weeks = (ArrayList)document.getData().get("weeks");
+                        HashMap week1 = (HashMap)weeks.get(0);
+                        boolean TorF = (boolean)week1.get("checked");
+
+                        System.out.println("data type = " + data.getClass().getName());
+                        System.out.println("week type = " + weeks.getClass().getName());
+                        System.out.println("week1 type = " + week1.getClass().getName());
+                        System.out.println("week 1 = " + week1);
+                        System.out.println("checked or not checked? = " + TorF);
+
                     }
                 }
                 else {
@@ -184,7 +194,7 @@ public class WeekActivity extends AppCompatActivity {
         startActivity(day);
     }
 
-    private void getWeekChecks(){
+    private void getWeekChecks() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         CollectionReference userRef = db.collection("users");
@@ -193,12 +203,11 @@ public class WeekActivity extends AppCompatActivity {
         usersDataQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    for(QueryDocumentSnapshot document: task.getResult()){
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
                         Log.d("Got it dawg", document.getId() + " => " + document.getData());
                     }
-                }
-                else {
+                } else {
                     System.out.println("query failed man");
                 }
             }
