@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,7 +19,18 @@ import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 // Activity for the screen that gives users the ability to select the week they're training
@@ -28,10 +40,34 @@ public class WeekActivity extends AppCompatActivity {
     public static final String WEEK_PREFERENCES = "WEEK_PREFERENCES";
     SharedPreferences weekPreferences;
 
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference userRef = db.collection("users");
+    Query usersDataQuery = userRef.whereEqualTo("name", "Jason");
+    boolean weekCheck;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_week);
+
+        usersDataQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for(QueryDocumentSnapshot document: task.getResult()){
+                        Log.d("Got it dawg", document.getId() + " => " + document.getData());
+
+                        Arra weeks = document.getData().get("weeks");
+                        System.out.println("weeks will be = ");
+                        System.out.println(weeks[0]);
+//                        weekCheck = document.getData().get("weeks");
+                    }
+                }
+                else {
+                    System.out.println("query failed man");
+                }
+            }
+        });
 
         LinearLayout mLinearLayout = findViewById(R.id.week_layout);
         weekPreferences = getSharedPreferences(WEEK_PREFERENCES, Context.MODE_PRIVATE);
@@ -146,6 +182,27 @@ public class WeekActivity extends AppCompatActivity {
         Intent day = new Intent(getApplicationContext(), DayActivity.class);
         day.putExtra(DayActivity.EXTRA_WEEK, week); // Send the week so the day activity knows what week was selected
         startActivity(day);
+    }
+
+    private void getWeekChecks(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        CollectionReference userRef = db.collection("users");
+        Query usersDataQuery = userRef.whereEqualTo("name", "Jason");
+
+        usersDataQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for(QueryDocumentSnapshot document: task.getResult()){
+                        Log.d("Got it dawg", document.getId() + " => " + document.getData());
+                    }
+                }
+                else {
+                    System.out.println("query failed man");
+                }
+            }
+        });
     }
 
     @Override
