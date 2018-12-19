@@ -30,7 +30,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,9 +85,11 @@ public class WeekActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 System.out.println("document shot = " + documentSnapshot);
-                System.out.println("document shot type = " + documentSnapshot.getClass().getName());
+
                 Gainer gainer = documentSnapshot.toObject(Gainer.class);
-                gainer.printsomething();
+                Boolean[] weekChecks = gainer.getWeekChecks();
+                System.out.println("week checks = " + Arrays.toString(weekChecks));
+
             }
         });
 
