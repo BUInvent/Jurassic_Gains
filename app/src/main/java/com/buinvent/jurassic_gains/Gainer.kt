@@ -1,6 +1,5 @@
 package com.buinvent.jurassic_gains
 
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -42,7 +41,6 @@ data class Gainer(val weeks: ArrayList<HashMap<String, Any>>?, val name: String?
         println("exercise = " + exercise)
         println("exercise sets = " + exercise["sets"])
         println("exercise sets type = " + exercise["sets"]!!::class.java)
-//        return arrayOfNulls(0)
 
         return exercise["sets"] as ArrayList<HashMap<String, Int>?>
 

@@ -46,9 +46,6 @@ public class WeekActivity extends AppCompatActivity {
     SharedPreferences weekPreferences;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-//    CollectionReference userRef = db.collection("users");
-//    Query usersDataQuery = userRef.whereEqualTo("name", "Jason");
-
     DocumentReference userRef = db.collection("users").document("2");
 
     @Override
@@ -56,46 +53,11 @@ public class WeekActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_week);
 
-//        usersDataQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()){
-//                    for(QueryDocumentSnapshot document: task.getResult()){
-//                        Log.d("data = ", document.getId() + " => " + document.getData());
-//
-//                        Object data = document.getData();
-//                        ArrayList weeks = (ArrayList)document.getData().get("weeks");
-//                        HashMap week1 = (HashMap)weeks.get(0);
-//                        boolean TorF = (boolean)week1.get("checked");
-//
-//                        System.out.println("data type = " + data.getClass().getName());
-//                        System.out.println("week type = " + weeks.getClass().getName());
-//                        System.out.println("week1 type = " + week1.getClass().getName());
-//                        System.out.println("week 1 = " + week1);
-//                        System.out.println("checked or not checked? = " + TorF);
-//
-//                    }
-//                }
-//                else {
-//                    System.out.println("query failed man");
-//                }
-//            }
-//        });
-
         userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                System.out.println("document shot = " + documentSnapshot);
 
                 Gainer gainer = documentSnapshot.toObject(Gainer.class);
-                Boolean[] weekChecks = gainer.getWeekChecks();
-                Boolean[] dayChecks = gainer.getDayChecks(0);
-                ArrayList exerciseSets = gainer.getExerciseSets(0, 0, 1);
-//                gainer.getDayChecks(0);
-                System.out.println("week checks = " + Arrays.toString(weekChecks));
-                System.out.println("day checks = " + Arrays.toString(dayChecks));
-                System.out.println("exercise sets = " + TextUtils.join(", ", exerciseSets));
-                System.out.println("exercise set 2 = " + ((HashMap)exerciseSets.get(1)).get("weight"));
 
             }
         });
