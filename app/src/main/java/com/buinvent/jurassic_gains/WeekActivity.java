@@ -88,7 +88,10 @@ public class WeekActivity extends AppCompatActivity {
 
                 Gainer gainer = documentSnapshot.toObject(Gainer.class);
                 Boolean[] weekChecks = gainer.getWeekChecks();
+                Boolean[] dayChecks = gainer.getDayChecks(0);
+//                gainer.getDayChecks(0);
                 System.out.println("week checks = " + Arrays.toString(weekChecks));
+                System.out.println("day checks = " + Arrays.toString(dayChecks));
 
             }
         });
