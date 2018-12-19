@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -89,9 +90,12 @@ public class WeekActivity extends AppCompatActivity {
                 Gainer gainer = documentSnapshot.toObject(Gainer.class);
                 Boolean[] weekChecks = gainer.getWeekChecks();
                 Boolean[] dayChecks = gainer.getDayChecks(0);
+                ArrayList exerciseSets = gainer.getExerciseSets(0, 0, 1);
 //                gainer.getDayChecks(0);
                 System.out.println("week checks = " + Arrays.toString(weekChecks));
                 System.out.println("day checks = " + Arrays.toString(dayChecks));
+                System.out.println("exercise sets = " + TextUtils.join(", ", exerciseSets));
+                System.out.println("exercise set 2 = " + ((HashMap)exerciseSets.get(1)).get("weight"));
 
             }
         });
