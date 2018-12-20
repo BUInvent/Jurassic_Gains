@@ -68,15 +68,15 @@ public class WeekActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_week);
 
+        weekPreferences = getSharedPreferences(WEEK_PREFERENCES, Context.MODE_PRIVATE);
+
         userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
 
                 if (documentSnapshot.exists()) {
                     gainer = documentSnapshot.toObject(Gainer.class);
-                }
-
-                else {
+                } else {
                     createBlankDoc(user.getUid());
                     userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
@@ -87,6 +87,8 @@ public class WeekActivity extends AppCompatActivity {
                 }
 
                 weekChecks = gainer.getWeekChecks();
+                addLayout(weekChecks);
+                System.out.println("week checks a = " + Arrays.toString(weekChecks));
 
             }
         })
@@ -97,18 +99,19 @@ public class WeekActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    private void addLayout(Boolean[] weekChecks) {
+
+        CheckBox[] checkBoxes = new CheckBox[weekChecks.length];
+        Button[] buttons = new Button[weekChecks.length];
         LinearLayout mLinearLayout = findViewById(R.id.week_layout);
-        weekPreferences = getSharedPreferences(WEEK_PREFERENCES, Context.MODE_PRIVATE);
 
         LayoutParams weekLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, 0, 1);
         LayoutParams checkBoxLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
         LayoutParams buttonLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 
-        // Declare and Initialize checkbox and button variables to be size of the number of weeks
-        CheckBox[] checkBoxes = new CheckBox[WEEKS_NUM];
-        Button[] buttons = new Button[WEEKS_NUM];
-
-        for (int i = 0; i < WEEKS_NUM; i++) {
+        for (int i = 0; i < weekChecks.length; i++) {
 
             LinearLayout weekLayout = new LinearLayout(this);
             weekLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -121,7 +124,7 @@ public class WeekActivity extends AppCompatActivity {
             weekLayout.addView(checkBoxes[i], checkBoxLayoutParams);
 
             // Set the checkbox to be checked or unchecked based on what was previously saved
-            checkBoxes[i].setChecked(weekPreferences.getBoolean("checkbox_week" + Integer.toString(i + 1), false));
+            checkBoxes[i].setChecked(weekChecks[i]);
 
             // Add a button and set the text for each week
             buttons[i] = new Button(this);
@@ -139,7 +142,7 @@ public class WeekActivity extends AppCompatActivity {
                 checkBoxListener(i, checkBoxes[i - 1], checkBoxes[i - 2], checkBoxes[i], buttons[i]);
             }
 
-            // If the previous checkbox wasn't checked, dis the checkbox and buttons
+            // If the previous checkbox wasn't checked, discheck the checkbox and buttons
             if (i != 0 && !checkBoxes[i - 1].isChecked()) {
                 checkBoxes[i].setEnabled(false);
                 buttons[i].setEnabled(false);
@@ -156,9 +159,7 @@ public class WeekActivity extends AppCompatActivity {
         checkBoxListener(checkBoxes[0], checkBoxes[1], buttons[1]);
         // Add a checkbox listener for the last week's checkbox
         checkBoxListener(checkBoxes[WEEKS_NUM - 1], checkBoxes[WEEKS_NUM - 2]);
-
     }
-
 
     //    This is for all weeks that are not first or last
     private void checkBoxListener(final int weekNum, final CheckBox currentCheckBox,
