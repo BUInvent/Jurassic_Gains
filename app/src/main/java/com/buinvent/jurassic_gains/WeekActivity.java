@@ -33,11 +33,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 
 // Activity for the screen that gives users the ability to select the week they're training
@@ -62,6 +60,9 @@ public class WeekActivity extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     DocumentReference userRef = db.collection("users").document(user.getUid());
 
+    Gainer gainer;
+    Boolean[] weekChecks;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +71,23 @@ public class WeekActivity extends AppCompatActivity {
         userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Gainer gainer = documentSnapshot.toObject(Gainer.class);
-                if (!documentSnapshot.exists()) createBlankDoc(user.getUid());
+
+                if (documentSnapshot.exists()) {
+                    gainer = documentSnapshot.toObject(Gainer.class);
+                }
+
+                else {
+                    createBlankDoc(user.getUid());
+                    userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot innerDocumentSnapshot) {
+                            gainer = innerDocumentSnapshot.toObject(Gainer.class);
+                        }
+                    });
+                }
+
+                weekChecks = gainer.getWeekChecks();
+
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
