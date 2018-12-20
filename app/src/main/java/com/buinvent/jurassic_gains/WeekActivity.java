@@ -23,6 +23,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -42,11 +44,13 @@ import java.util.Map;
 public class WeekActivity extends AppCompatActivity {
 
     public static final int WEEKS_NUM = 12;  // Number of weeks for training
+    public static final int SET_NUM = 3;
     public static final String WEEK_PREFERENCES = "WEEK_PREFERENCES";
     SharedPreferences weekPreferences;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    DocumentReference userRef = db.collection("users").document("2");
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    DocumentReference userRef = db.collection("users").document(user.getUid());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +60,16 @@ public class WeekActivity extends AppCompatActivity {
         userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-
                 Gainer gainer = documentSnapshot.toObject(Gainer.class);
-
+                if (!documentSnapshot.exists()) createBlankDoc(user.getUid());
             }
-        });
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("it failed", "Error getting document", e);
+                    }
+                });
 
         LinearLayout mLinearLayout = findViewById(R.id.week_layout);
         weekPreferences = getSharedPreferences(WEEK_PREFERENCES, Context.MODE_PRIVATE);
@@ -219,6 +228,56 @@ public class WeekActivity extends AppCompatActivity {
                     });
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void createBlankDoc(String userID) {
+
+//        Map<String, Object> user = new HashMap<>();
+//
+//        HashMap<String, Object> days = new HashMap<>();
+//        days.put("checked", false);
+//        days.put("days", )
+//
+//        ArrayList<HashMap> weeks = new ArrayList<>();
+////        Arrays.fill(weeks, checkedFalse);
+//        user.put("weeks", weeks);
+//        for (int i = 0; i < WEEKS_NUM; i++){
+//            weeks.add(days);
+//        }
+
+        Map<String, Object> user = new HashMap<>();
+
+        ArrayList<HashMap> setList = new ArrayList<>(SET_NUM);
+
+        HashMap<String, Integer> setMap = new HashMap<>();
+        setMap.put("weight", 0);
+        setMap.put("reps", 0);
+
+        for (int i = 0; i < SET_NUM; i++) {
+            setList.add(setMap);
+        }
+
+        HashMap<String, Integer> exercisesMap = new HashMap<>();
+        exercisesMap.put("weight", 0);
+
+        System.out.println("setList = " + setList);
+
+        // Add a new document with the user's ID
+        db.collection("users")
+                .document(userID)
+                .set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("worked man", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("it failed man", "Error writing document", e);
+                    }
+                });
     }
 
 }

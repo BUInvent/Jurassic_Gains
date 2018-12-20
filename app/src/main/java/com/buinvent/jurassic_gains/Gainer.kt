@@ -38,10 +38,6 @@ data class Gainer(val weeks: ArrayList<HashMap<String, Any>>?, val name: String?
         val day = (week["days"] as ArrayList<*>)[dayIndex] as HashMap<*, *>
         val exercise = (day["exercises"] as ArrayList<*>)[exerciseIndex] as HashMap<*, *>
 
-        println("exercise = " + exercise)
-        println("exercise sets = " + exercise["sets"])
-        println("exercise sets type = " + exercise["sets"]!!::class.java)
-
         return exercise["sets"] as ArrayList<HashMap<String, Int>?>
 
     }
