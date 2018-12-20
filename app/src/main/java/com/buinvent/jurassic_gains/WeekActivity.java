@@ -45,6 +45,16 @@ public class WeekActivity extends AppCompatActivity {
 
     public static final int WEEKS_NUM = 12;  // Number of weeks for training
     public static final int SET_NUM = 3;
+    public static final String[][] EXERCISES = new String[][]{
+            {"Bench Press", "Skull Crushers", "Flys", "Incline Bench Press"},
+            {"Chin-Ups", "Bicep Curls", "Bent Over Rows", "Lat Pulldown"},
+            {},
+            {"Squats", "Leg Extensions", "Leg Curls", "Calf Raises"},
+            {"Shoulder Press", "Side Lateral Raise", "Upright Rows", "Seated Bent Over Flys"},
+            {},
+            {}
+    };
+
     public static final String WEEK_PREFERENCES = "WEEK_PREFERENCES";
     SharedPreferences weekPreferences;
 
@@ -257,10 +267,26 @@ public class WeekActivity extends AppCompatActivity {
             setList.add(setMap);
         }
 
-        HashMap<String, Integer> exercisesMap = new HashMap<>();
-        exercisesMap.put("weight", 0);
+        ArrayList<HashMap> daysList = new ArrayList<>(EXERCISES.length);
 
-        System.out.println("setList = " + setList);
+        for (int i = 0; i < EXERCISES.length; i++) {
+
+            ArrayList<HashMap> exerciseList = new ArrayList<>(EXERCISES[i].length);
+            for (int j = 0; j < EXERCISES[i].length; j++) {
+                HashMap<String, Object> exercisesMap = new HashMap<>();
+                exercisesMap.put("exercise", EXERCISES[i][j]);
+                exercisesMap.put("sets", setList);
+                exerciseList.add(exercisesMap);
+            }
+
+            HashMap<String, Object> dayMap = new HashMap<>();
+            dayMap.put("checked", false);
+            dayMap.put("exercises", exerciseList);
+
+            daysList.add(dayMap);
+        }
+
+        System.out.println("days list = " + daysList);
 
         // Add a new document with the user's ID
         db.collection("users")
