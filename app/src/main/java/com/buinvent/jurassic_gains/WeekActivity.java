@@ -273,19 +273,15 @@ public class WeekActivity extends AppCompatActivity {
             setsMap.put("set " + i, setMap);
         }
 
-//        ArrayList<HashMap> daysList = new ArrayList<>(EXERCISES.length);
         HashMap<String, HashMap> daysMap = new HashMap<>();
 
         for (int i = 0; i < EXERCISES.length; i++) {
 
             HashMap<String, HashMap> exercisesMap = new HashMap<>();
-//            ArrayList<HashMap> exerciseList = new ArrayList<>(EXERCISES[i].length);
             for (int j = 0; j < EXERCISES[i].length; j++) {
                 HashMap<String, Object> exerciseMap = new HashMap<>();
-//                exercisesMap.put("exercise", EXERCISES[i][j]);
                 exerciseMap.put("sets", setsMap);
                 exercisesMap.put(EXERCISES[i][j], exerciseMap);
-//                exerciseList.add(exercisesMap);
             }
 
             HashMap<String, Object> dayMap = new HashMap<>();
@@ -299,15 +295,10 @@ public class WeekActivity extends AppCompatActivity {
         weekMap.put("checked", false);
         weekMap.put("days", daysMap);
 
-//        ArrayList<HashMap> weekList = new ArrayList<>(WEEKS_NUM);
         HashMap<String, HashMap> weeksMap = new HashMap<>();
         for (int i = 0; i < WEEKS_NUM; i++) {
-//            weekList.add(weekMap);
             weeksMap.put("WEEK " + i, weekMap);
         }
-
-//        HashMap<String, Object> docMap = new HashMap<>();
-//        docMap.put("weeks", weekList);
 
         // Add a new document with the user's ID
         db.collection("users")
