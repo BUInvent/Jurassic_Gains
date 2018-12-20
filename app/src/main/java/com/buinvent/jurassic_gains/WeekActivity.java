@@ -242,8 +242,6 @@ public class WeekActivity extends AppCompatActivity {
 
     public void createBlankDoc(String userID) {
 
-        Map<String, Object> user = new HashMap<>();
-
         ArrayList<HashMap> setList = new ArrayList<>(SET_NUM);
 
         HashMap<String, Integer> setMap = new HashMap<>();
@@ -282,22 +280,23 @@ public class WeekActivity extends AppCompatActivity {
             weekList.add(weekMap);
         }
 
-        System.out.println("week list = " + weekList);
+        HashMap<String, Object> docMap = new HashMap<>();
+        docMap.put("weeks", weekList);
 
         // Add a new document with the user's ID
         db.collection("users")
                 .document(userID)
-                .set(user)
+                .set(docMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d("worked man", "DocumentSnapshot successfully written!");
+                        Log.d("Success", "DocumentSnapshot successfully written!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w("it failed man", "Error writing document", e);
+                        Log.w("Failure", "Error writing document", e);
                     }
                 });
     }
