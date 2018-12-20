@@ -242,19 +242,6 @@ public class WeekActivity extends AppCompatActivity {
 
     public void createBlankDoc(String userID) {
 
-//        Map<String, Object> user = new HashMap<>();
-//
-//        HashMap<String, Object> days = new HashMap<>();
-//        days.put("checked", false);
-//        days.put("days", )
-//
-//        ArrayList<HashMap> weeks = new ArrayList<>();
-////        Arrays.fill(weeks, checkedFalse);
-//        user.put("weeks", weeks);
-//        for (int i = 0; i < WEEKS_NUM; i++){
-//            weeks.add(days);
-//        }
-
         Map<String, Object> user = new HashMap<>();
 
         ArrayList<HashMap> setList = new ArrayList<>(SET_NUM);
@@ -286,7 +273,16 @@ public class WeekActivity extends AppCompatActivity {
             daysList.add(dayMap);
         }
 
-        System.out.println("days list = " + daysList);
+        HashMap<String, Object> weekMap = new HashMap<>();
+        weekMap.put("checked", false);
+        weekMap.put("days", daysList);
+
+        ArrayList<HashMap> weekList = new ArrayList<>(WEEKS_NUM);
+        for (int i = 0; i < WEEKS_NUM; i++) {
+            weekList.add(weekMap);
+        }
+
+        System.out.println("week list = " + weekList);
 
         // Add a new document with the user's ID
         db.collection("users")
