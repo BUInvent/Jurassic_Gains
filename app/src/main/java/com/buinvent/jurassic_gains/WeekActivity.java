@@ -174,9 +174,13 @@ public class WeekActivity extends AppCompatActivity {
             previousCheckBox.setEnabled(!currentCheckBox.isChecked());
 
             // Save the state of the current checkbox
-            SharedPreferences.Editor editor = weekPreferences.edit();
-            editor.putBoolean("checkbox_week" + Integer.toString(weekNum), currentCheckBox.isChecked());
-            editor.apply();
+            db.collection("users").document(user.getUid())
+                    .update(
+                            "weeks[" + (weekNum - 1) + "].checked", currentCheckBox.isChecked()
+                    );
+//            SharedPreferences.Editor editor = weekPreferences.edit();
+//            editor.putBoolean("checkbox_week" + Integer.toString(weekNum), currentCheckBox.isChecked());
+//            editor.apply();
         });
     }
 
@@ -259,51 +263,56 @@ public class WeekActivity extends AppCompatActivity {
 
     public void createBlankDoc(String userID) {
 
-        ArrayList<HashMap> setList = new ArrayList<>(SET_NUM);
+        HashMap<String, HashMap> setsMap = new HashMap<>();
 
         HashMap<String, Integer> setMap = new HashMap<>();
         setMap.put("weight", 0);
         setMap.put("reps", 0);
 
-        for (int i = 0; i < SET_NUM; i++) {
-            setList.add(setMap);
+        for (int i = 1; i <= SET_NUM; i++) {
+            setsMap.put("set " + i, setMap);
         }
 
-        ArrayList<HashMap> daysList = new ArrayList<>(EXERCISES.length);
+//        ArrayList<HashMap> daysList = new ArrayList<>(EXERCISES.length);
+        HashMap<String, HashMap> daysMap = new HashMap<>();
 
         for (int i = 0; i < EXERCISES.length; i++) {
 
-            ArrayList<HashMap> exerciseList = new ArrayList<>(EXERCISES[i].length);
+            HashMap<String, HashMap> exercisesMap = new HashMap<>();
+//            ArrayList<HashMap> exerciseList = new ArrayList<>(EXERCISES[i].length);
             for (int j = 0; j < EXERCISES[i].length; j++) {
-                HashMap<String, Object> exercisesMap = new HashMap<>();
-                exercisesMap.put("exercise", EXERCISES[i][j]);
-                exercisesMap.put("sets", setList);
-                exerciseList.add(exercisesMap);
+                HashMap<String, Object> exerciseMap = new HashMap<>();
+//                exercisesMap.put("exercise", EXERCISES[i][j]);
+                exerciseMap.put("sets", setsMap);
+                exercisesMap.put(EXERCISES[i][j], exerciseMap);
+//                exerciseList.add(exercisesMap);
             }
 
             HashMap<String, Object> dayMap = new HashMap<>();
             dayMap.put("checked", false);
-            dayMap.put("exercises", exerciseList);
+            dayMap.put("exercises", exercisesMap);
 
-            daysList.add(dayMap);
+            daysMap.put("DAY " + (i + 1), dayMap);
         }
 
         HashMap<String, Object> weekMap = new HashMap<>();
         weekMap.put("checked", false);
-        weekMap.put("days", daysList);
+        weekMap.put("days", daysMap);
 
-        ArrayList<HashMap> weekList = new ArrayList<>(WEEKS_NUM);
+//        ArrayList<HashMap> weekList = new ArrayList<>(WEEKS_NUM);
+        HashMap<String, HashMap> weeksMap = new HashMap<>();
         for (int i = 0; i < WEEKS_NUM; i++) {
-            weekList.add(weekMap);
+//            weekList.add(weekMap);
+            weeksMap.put("WEEK " + i, weekMap);
         }
 
-        HashMap<String, Object> docMap = new HashMap<>();
-        docMap.put("weeks", weekList);
+//        HashMap<String, Object> docMap = new HashMap<>();
+//        docMap.put("weeks", weekList);
 
         // Add a new document with the user's ID
         db.collection("users")
                 .document(userID)
-                .set(docMap)
+                .set(weeksMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
