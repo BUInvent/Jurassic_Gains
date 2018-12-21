@@ -24,15 +24,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 
 // Activity for the screen that gives users the ability to select the week they're training
@@ -74,17 +71,23 @@ public class WeekActivity extends AppCompatActivity {
                 if (documentSnapshot.exists()) {
                     gainer = documentSnapshot.toObject(Gainer.class);
                     weekChecks = gainer.getWeekChecks();
+                    addLayout(weekChecks);
                 } else {
+
                     createBlankDoc(user.getUid());
+                    try { TimeUnit.SECONDS.sleep(7);
+                    } catch (InterruptedException e) {
+                        System.out.println("got interrupted!"); }
+
                     userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot innerDocumentSnapshot) {
                             gainer = innerDocumentSnapshot.toObject(Gainer.class);
                             weekChecks = gainer.getWeekChecks();
+                            addLayout(weekChecks);
                         }
                     });
                 }
-                addLayout(weekChecks);
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
@@ -137,7 +140,7 @@ public class WeekActivity extends AppCompatActivity {
                 checkBoxListener(i, checkBoxes[i - 1], checkBoxes[i - 2], checkBoxes[i], buttons[i]);
             }
 
-            // If the previous checkbox wasn't checked, discheck the checkbox and buttons
+            // If the previous checkbox wasn't checked, uncheck the checkbox and buttons
             if (i != 0 && !checkBoxes[i - 1].isChecked()) {
                 checkBoxes[i].setEnabled(false);
                 buttons[i].setEnabled(false);
@@ -215,26 +218,6 @@ public class WeekActivity extends AppCompatActivity {
         startActivity(day);
     }
 
-    private void getWeekChecks() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        CollectionReference userRef = db.collection("users");
-        Query usersDataQuery = userRef.whereEqualTo("name", "Jason");
-
-        usersDataQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Log.d("Got it dawg", document.getId() + " => " + document.getData());
-                    }
-                } else {
-                    System.out.println("query failed man");
-                }
-            }
-        });
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -259,7 +242,7 @@ public class WeekActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void createBlankDoc(String userID) {
+    private void createBlankDoc(String userID) {
 
         HashMap<String, HashMap> setsMap = new HashMap<>();
 
