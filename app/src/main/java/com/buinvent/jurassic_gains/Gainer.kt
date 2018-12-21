@@ -14,22 +14,25 @@ data class Gainer(val weeks: HashMap<String, Any>?) {
         val weekChecks = arrayOfNulls<Boolean>(weeks.size)
 
         for (i in 0 until weeks.size) {
-            weekChecks[i] = (weeks["WEEK " + (i + 1)] as HashMap<*, *>)["checked"] as Boolean
+            weekChecks[i] = (weeks["WEEK " + (i + 1)] as HashMap<*, *>) ["checked"] as Boolean
         }
         return weekChecks
     }
 
-//    fun getDayChecks(weekIndex: Int): Array<Boolean?> {
-//
-//        if (weeks == null) return arrayOfNulls(0)
-//        val days = weeks[weekIndex]["days"] as ArrayList<*>
-//        val dayChecks = arrayOfNulls<Boolean>(days.size)
-//
-//        for (i in 0 until days.size) {
-//            dayChecks[i] = (days[i] as HashMap<*, *>)["checked"] as Boolean
-//        }
-//        return dayChecks
-//    }
+    fun getDayChecks(weekNum: Int): Array<Boolean?> {
+
+        if (weeks == null) return arrayOfNulls(0)
+
+        val dayChecks = arrayOfNulls<Boolean>(7)
+        val singleWeek = weeks["WEEK " + weekNum] as HashMap<*, *>
+        val days = singleWeek["days"] as HashMap<*, *>
+
+        for (i in 1..7) {
+            val day = days["DAY " + i] as HashMap<*, *>
+            dayChecks[i] = day["checked"] as Boolean
+        }
+        return dayChecks
+    }
 //
 //    fun getExerciseSets(weekIndex: Int, dayIndex: Int, exerciseIndex: Int): ArrayList<HashMap<String, Int>?> {
 //

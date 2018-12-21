@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import java.io.Serializable;
+
 public class DayActivity extends AppCompatActivity {
 
     public static final String EXTRA_WEEK = "com.buinvent.jurassic_gains.WEEK";
@@ -25,6 +27,7 @@ public class DayActivity extends AppCompatActivity {
         Intent weekNumIntent = getIntent();
         String weekExtra = weekNumIntent.getStringExtra(EXTRA_WEEK); // grab the week that was selected from the week activity
 
+
         TextView topText = findViewById(R.id.weekText);
         topText.setText(weekExtra); // set the title of the screen to be the week that was selected
 
@@ -32,19 +35,25 @@ public class DayActivity extends AppCompatActivity {
 
         // Declare and initialize a checkbox for the workout days (1, 2, 4, 5)
         CheckBox[] workoutDayBox = {findViewById(R.id.checkbox_day1),
-                                    findViewById(R.id.checkbox_day2),
-                                    findViewById(R.id.checkbox_day4),
-                                    findViewById(R.id.checkbox_day5)};
+                findViewById(R.id.checkbox_day2),
+                findViewById(R.id.checkbox_day3),
+                findViewById(R.id.checkbox_day4),
+                findViewById(R.id.checkbox_day5),
+                findViewById(R.id.checkbox_day6),
+                findViewById(R.id.checkbox_day7)};
 
         // Declare and initialize a button for the workout days
         Button[] workoutDayButton = {findViewById(R.id.button_day1),
-                                     findViewById(R.id.button_day2),
-                                     findViewById(R.id.button_day4),
-                                     findViewById(R.id.button_day5)};
+                findViewById(R.id.button_day2),
+                findViewById(R.id.button_day3),
+                findViewById(R.id.button_day4),
+                findViewById(R.id.button_day5),
+                findViewById(R.id.button_day6),
+                findViewById(R.id.button_day7)};
 
-        for(int i = 0; i < workoutDayBox.length; i++){
+        for (int i = 0; i < workoutDayBox.length; i++) {
 
-            final String workoutDay = "checkbox_workout_day" + Integer.toString(i+1);
+            final String workoutDay = "checkbox_workout_day" + Integer.toString(i + 1);
             final int iNum = i;
 
             // Set the checkbox checked based on what was saved
@@ -63,7 +72,7 @@ public class DayActivity extends AppCompatActivity {
     }
 
     // Function that starts the workout activity and sends the day and week to it
-    private void setWorkout(final String day, final String week){
+    private void setWorkout(final String day, final String week) {
         Intent workout = new Intent(getApplicationContext(), WorkoutActivity.class);
         workout.putExtra(WorkoutActivity.EXTRA_DAY, day);
         workout.putExtra(EXTRA_WEEK, week.substring(week.lastIndexOf(' ') + 1));
@@ -71,7 +80,7 @@ public class DayActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         finish();
         return true;
     }
