@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -33,7 +32,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -75,19 +73,18 @@ public class WeekActivity extends AppCompatActivity {
 
                 if (documentSnapshot.exists()) {
                     gainer = documentSnapshot.toObject(Gainer.class);
+                    weekChecks = gainer.getWeekChecks();
                 } else {
                     createBlankDoc(user.getUid());
                     userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot innerDocumentSnapshot) {
                             gainer = innerDocumentSnapshot.toObject(Gainer.class);
+                            weekChecks = gainer.getWeekChecks();
                         }
                     });
                 }
-
-                weekChecks = gainer.getWeekChecks();
                 addLayout(weekChecks);
-
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
@@ -156,7 +153,7 @@ public class WeekActivity extends AppCompatActivity {
         // Add checkbox listener for the first week's checkbox
         checkBoxListener(checkBoxes[0], checkBoxes[1], buttons[1]);
         // Add a checkbox listener for the last week's checkbox
-        checkBoxListener(checkBoxes[WEEKS_NUM - 1], checkBoxes[WEEKS_NUM - 2]);
+        checkBoxListener(checkBoxes[weekChecks.length - 1], checkBoxes[weekChecks.length - 2], weekChecks.length);
     }
 
     //    This is for all weeks that are not first or last
@@ -173,12 +170,11 @@ public class WeekActivity extends AppCompatActivity {
 
             // Save the state of the current checkbox
             db.collection("users").document(user.getUid())
-                    .update(
-                            "weeks[" + (weekNum - 1) + "].checked", currentCheckBox.isChecked()
+                    .update("weeks.WEEK " + (weekNum) + ".checked", currentCheckBox.isChecked()
                     );
-//            SharedPreferences.Editor editor = weekPreferences.edit();
-//            editor.putBoolean("checkbox_week" + Integer.toString(weekNum), currentCheckBox.isChecked());
-//            editor.apply();
+            SharedPreferences.Editor editor = weekPreferences.edit();
+            editor.putBoolean("checkbox_week" + Integer.toString(weekNum), currentCheckBox.isChecked());
+            editor.apply();
         });
     }
 
@@ -190,6 +186,8 @@ public class WeekActivity extends AppCompatActivity {
             nextCheckBox.setEnabled(currentCheckBox.isChecked());
             nextButton.setEnabled(currentCheckBox.isChecked());
 
+            db.collection("users").document(user.getUid())
+                    .update("weeks.WEEK 1.checked", currentCheckBox.isChecked());
             SharedPreferences.Editor editor = weekPreferences.edit();
             editor.putBoolean("checkbox_week1", currentCheckBox.isChecked());
             editor.apply();
@@ -197,13 +195,15 @@ public class WeekActivity extends AppCompatActivity {
     }
 
     //    For the last week since it doesn't have a next week
-    private void checkBoxListener(final CheckBox currentCheckBox, final CheckBox previousCheckBox) {
+    private void checkBoxListener(final CheckBox currentCheckBox, final CheckBox previousCheckBox, final int weeksLength) {
 
         currentCheckBox.setOnClickListener((View v) -> {
             previousCheckBox.setEnabled(!currentCheckBox.isChecked());
 
+            db.collection("users").document(user.getUid())
+                    .update("weeks.WEEK " + weeksLength + ".checked", currentCheckBox.isChecked());
             SharedPreferences.Editor editor = weekPreferences.edit();
-            editor.putBoolean("checkbox_week" + Integer.toString(WEEKS_NUM), currentCheckBox.isChecked());
+            editor.putBoolean("checkbox_week" + weeksLength, currentCheckBox.isChecked());
             editor.apply();
         });
     }
