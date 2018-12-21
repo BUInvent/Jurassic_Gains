@@ -33,7 +33,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -88,7 +87,6 @@ public class WeekActivity extends AppCompatActivity {
 
                 weekChecks = gainer.getWeekChecks();
                 addLayout(weekChecks);
-                System.out.println("week checks a = " + Arrays.toString(weekChecks));
 
             }
         })
@@ -297,13 +295,16 @@ public class WeekActivity extends AppCompatActivity {
 
         HashMap<String, HashMap> weeksMap = new HashMap<>();
         for (int i = 0; i < WEEKS_NUM; i++) {
-            weeksMap.put("WEEK " + i, weekMap);
+            weeksMap.put("WEEK " + (i + 1), weekMap);
         }
+
+        HashMap<String, HashMap> docMap = new HashMap<>();
+        docMap.put("weeks", weeksMap);
 
         // Add a new document with the user's ID
         db.collection("users")
                 .document(userID)
-                .set(weeksMap)
+                .set(docMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
