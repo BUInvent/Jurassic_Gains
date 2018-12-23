@@ -130,8 +130,9 @@ public class WeekActivity extends AppCompatActivity {
             buttons[i].setGravity(Gravity.CENTER);
             String weekText = "WEEK " + String.valueOf(i + 1);
             buttons[i].setText(weekText);
+            final int weekNum = i + 1;
             // Set a click listener that will start the Day activity and send the week's text
-            buttons[i].setOnClickListener(view -> setDay(weekText));
+            buttons[i].setOnClickListener(view -> setDay(weekNum));
             weekLayout.addView(buttons[i], buttonLayoutParams);
 
             // Do a checkbox listener if i > 1. This is because you need three checkboxes to run
@@ -212,9 +213,10 @@ public class WeekActivity extends AppCompatActivity {
     }
 
     // Function to start the Day Activity
-    private void setDay(final String week) {
+    private void setDay(final int weekNum) {
         Intent day = new Intent(getApplicationContext(), DayActivity.class);
-        day.putExtra(DayActivity.EXTRA_WEEK, week); // Send the week so the day activity knows what week was selected
+        day.putExtra(DayActivity.EXTRA_WEEK, weekNum); // Send the week so the day activity knows what week was selected
+        day.putExtra(DayActivity.EXTRA_GAINER, gainer);
         startActivity(day);
     }
 

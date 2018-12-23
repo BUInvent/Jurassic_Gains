@@ -1,10 +1,12 @@
 package com.buinvent.jurassic_gains
 
-import kotlin.collections.ArrayList
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
 import kotlin.collections.HashMap
 
-//data class Gainer(val weeks: ArrayList<HashMap<String, Any>>?, val name: String?) {
-data class Gainer(val weeks: HashMap<String, Any>?) {
+@Parcelize
+class Gainer(val weeks: @RawValue HashMap<String, Any>?) : Parcelable {
 
     constructor() : this(null)
 
@@ -29,7 +31,7 @@ data class Gainer(val weeks: HashMap<String, Any>?) {
 
         for (i in 1..7) {
             val day = days["DAY " + i] as HashMap<*, *>
-            dayChecks[i] = day["checked"] as Boolean
+            dayChecks[i - 1] = day["checked"] as Boolean
         }
         return dayChecks
     }
