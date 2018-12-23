@@ -28,6 +28,7 @@ public class DayActivity extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private static FirebaseUser previousUser = null;
     private static ArrayList FIRST_TIME = new ArrayList();
+    Gainer gainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +38,8 @@ public class DayActivity extends AppCompatActivity {
 
         Intent weekIntent = getIntent();
         int weekNum = weekIntent.getIntExtra(EXTRA_WEEK, 1); // grab the week that was selected from the week activity
-        Gainer gainer = weekIntent.getParcelableExtra(EXTRA_GAINER);
+        gainer = weekIntent.getParcelableExtra(EXTRA_GAINER);
         Boolean[] dayChecks = gainer.getDayChecks(weekNum);
-        System.out.println("daychecks h = " + Arrays.toString(dayChecks));
 
         TextView topText = findViewById(R.id.weekText);
         topText.setText("WEEK " + weekNum); // set the title of the screen to be the week that was selected
@@ -99,15 +99,16 @@ public class DayActivity extends AppCompatActivity {
             });
 
             // Set a click listener for the workout day button
-//            workoutDayButton[i].setOnClickListener(view -> setWorkout(workoutDayButton[iNum].getText().toString(), weekNum));
+            workoutDayButton[i].setOnClickListener(view -> setWorkout(iNum + 1, weekNum));
         }
     }
 
     // Function that starts the workout activity and sends the day and week to it
-    private void setWorkout(final String day, final String week) {
+    private void setWorkout(final int dayNum, final int weekNum) {
         Intent workout = new Intent(getApplicationContext(), WorkoutActivity.class);
-        workout.putExtra(WorkoutActivity.EXTRA_DAY, day);
-        workout.putExtra(EXTRA_WEEK, week.substring(week.lastIndexOf(' ') + 1));
+        workout.putExtra(WorkoutActivity.EXTRA_DAY, dayNum);
+        workout.putExtra(EXTRA_WEEK, weekNum);
+        workout.putExtra(DayActivity.EXTRA_GAINER, gainer);
         startActivity(workout);
     }
 

@@ -35,16 +35,27 @@ class Gainer(val weeks: @RawValue HashMap<String, Any>?) : Parcelable {
         }
         return dayChecks
     }
-//
-//    fun getExerciseSets(weekIndex: Int, dayIndex: Int, exerciseIndex: Int): ArrayList<HashMap<String, Int>?> {
-//
-//        if (weeks == null) return arrayListOf()
-//
-//        val week = weeks[weekIndex] as HashMap<*, *>
-//        val day = (week["days"] as ArrayList<*>)[dayIndex] as HashMap<*, *>
-//        val exercise = (day["exercises"] as ArrayList<*>)[exerciseIndex] as HashMap<*, *>
-//
-//        return exercise["sets"] as ArrayList<HashMap<String, Int>?>
-//
-//    }
+
+    fun getExercises(weekNum: Int, dayNum: Int): ArrayList<String?> {
+
+        if (weeks == null) return arrayListOf()
+
+        val week = weeks["WEEK " + weekNum] as HashMap<*, *>
+        val days = week["days"] as HashMap<*, *>
+        val day = days["DAY " + dayNum] as HashMap<*, *>
+        val exercises = day["exercises"] as HashMap<*, *>
+        return ArrayList(exercises.keys) as ArrayList<String?>
+    }
+
+    fun getExerciseSets(weekNum: Int, dayNum: Int, exerciseName: String): HashMap<String, HashMap<String, Int>?> {
+
+        if (weeks == null) return HashMap<String, HashMap<String, Int>?>()
+
+        val week = weeks["WEEK " + weekNum] as HashMap<*, *>
+        val days = week["days"] as HashMap<*, *>
+        val day = days["DAY " + dayNum] as HashMap<*, *>
+        val exercises = day["exercises"] as HashMap<*, *>
+        val exercise = exercises[exerciseName] as HashMap<*, *>
+        return exercise["sets"] as HashMap<String, HashMap<String, Int>?>
+    }
 }
