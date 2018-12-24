@@ -91,23 +91,6 @@ public class WorkoutActivity extends AppCompatActivity {
 
         allWeightTextParams.setMargins(50, 0, 0, 0);
 
-        // Set the exercises based on the day that the user selected
-//        String[] exercises;
-//        if(dayNumExtra.equals(getResources().getString(R.string.day1))){
-//            exercises = new String[]{"Bench Press", "Skull Crushers", "Flyes", "Incline Bench Press"};
-//        }
-//        else if(dayNumExtra.equals(getResources().getString(R.string.day2))){
-//            exercises = new String[]{"Chin-Ups", "Bicep Curls", "Bent Over Rows", "Lat Pulldown"};
-//        }
-//        else if(dayNumExtra.equals(getResources().getString(R.string.day4))){
-//            exercises = new String[]{"Squats", "Leg Extensions", "Leg Curls", "Calf Raises"};
-//        }
-//        else if(dayNumExtra.equals(getResources().getString(R.string.day5))){
-//            exercises = new String[]{"Shoulder Press", "Side Lateral Raise", "Upright Rows", "Seated Bent Over Flys"};
-//        }
-//        else{ exercises = new String[0]; }
-
-//        EditText[][] lbsInput;
         HashMap<String, HashMap<String, EditText>> lbsInput = new HashMap<>();
         LinearLayout mLinearLayout = findViewById(R.id.workout_layout);
 
@@ -171,21 +154,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
                 // Grab and set the previous weight and reps
                 previousText.setText("None");
-//                SharedPreferences workoutPreferences = getSharedPreferences(WORKOUT_PREFERENCES, Context.MODE_PRIVATE);
-//                String previousWeight = workoutPreferences.getString((Integer.valueOf(weekNumExtra) - 1) + exercises[iNum] + "weight" + (jNum+1), "None");
-//                String previousReps = workoutPreferences.getString((Integer.valueOf(weekNumExtra) - 1) + exercises[iNum] + "reps" + (jNum+1), "8");
-//                if(previousWeight.equals("None"))
-//                    previousText.setText("None");
-//                else
-//                    previousText.setText(previousWeight + " x " + previousReps);
-
-//                 Grab and set the current weeks saved weight
-//                editor.putInt("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + j, exerciseSets.get("set " + j).get("weight"));
-//                editor.putInt("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "reps" + j, exerciseSets.get("set " + j).get("reps"));
-//                String temp = workoutPreferences.getString(weekNumExtra + exercises[iNum] + "weight" + (jNum+1), "");
                 String temp = workoutPreferences.getString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + j, "");
-//                lbsInput[i][j] = defaultEditText(temp, 16, 3);
-//                statLayout.addView(lbsInput[i][j], exerciseStatParams);
 
                 HashMap<String, EditText> innerMap = lbsInput.get(exercise);
                 if (innerMap == null) {
@@ -196,7 +165,6 @@ public class WorkoutActivity extends AppCompatActivity {
 
                 // Grab and set the current weeks saved reps
                 temp = workoutPreferences.getString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "reps" + j, "");
-//                temp = workoutPreferences.getString(weekNumExtra + exercises[iNum] + "reps" + (jNum + 1), "8");
                 EditText repsInput = defaultEditText(String.valueOf(temp), 16, 2);
                 statLayout.addView(repsInput, exerciseStatParams);
                 statLayout.addView(new Space(this), 30, LayoutParams.MATCH_PARENT);
@@ -260,8 +228,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    for (int j = 0; j < exerciseSets.size(); j++)
-//                        lbsInput[iNum][j].setText(s);
+                    for (int j = 1; j <= exerciseSets.size(); j++)
                         lbsInput.get(exercise).get("set " + j).setText(s);
                 }
             });
