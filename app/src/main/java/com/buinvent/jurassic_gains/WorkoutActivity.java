@@ -70,8 +70,8 @@ public class WorkoutActivity extends AppCompatActivity {
                 HashMap<String, HashMap<String, Integer>> exerciseSets = gainer.getExerciseSets(weekNumExtra, dayNumExtra, exercise);
 
                 for (int j = 1; j <= exerciseSets.size(); j++) {
-                    editor.putInt("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + j, Integer.valueOf(String.valueOf(exerciseSets.get("set " + j).get("weight"))));
-                    editor.putInt("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "reps" + j, Integer.valueOf(String.valueOf(exerciseSets.get("set " + j).get("reps"))));
+                    editor.putString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + j, String.valueOf(exerciseSets.get("set " + j).get("weight")));
+                    editor.putString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "reps" + j, String.valueOf(exerciseSets.get("set " + j).get("reps")));
                 }
             }
             editor.apply();
@@ -191,13 +191,13 @@ public class WorkoutActivity extends AppCompatActivity {
                 if (innerMap == null) {
                     lbsInput.put(exercise, innerMap = new HashMap<>());
                 }
-                innerMap.put("set " + j, defaultEditText(temp, 16, 3));
+                innerMap.put("set " + j, defaultEditText(String.valueOf(temp), 16, 3));
                 statLayout.addView(lbsInput.get(exercise).get("set " + j));
 
                 // Grab and set the current weeks saved reps
                 temp = workoutPreferences.getString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "reps" + j, "");
 //                temp = workoutPreferences.getString(weekNumExtra + exercises[iNum] + "reps" + (jNum + 1), "8");
-                EditText repsInput = defaultEditText(temp, 16, 2);
+                EditText repsInput = defaultEditText(String.valueOf(temp), 16, 2);
                 statLayout.addView(repsInput, exerciseStatParams);
                 statLayout.addView(new Space(this), 30, LayoutParams.MATCH_PARENT);
 
@@ -216,8 +216,9 @@ public class WorkoutActivity extends AppCompatActivity {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.toString().equals("")) s = "0";
                         db.collection("users").document(user.getUid())
-                                .update("weeks.WEEK " + (weekNumExtra) + ".days.DAY " + (dayNumExtra) + ".exercises" + exercise + ".sets.set " + (jNum) + ".reps", Integer.parseInt(s.toString()));
+                                .update("weeks.WEEK " + (weekNumExtra) + ".days.DAY " + (dayNumExtra) + ".exercises." + exercise + ".sets.set " + (jNum) + ".reps", Integer.parseInt(s.toString()));
                         editor.putString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "reps" + jNum, s.toString());
                         editor.apply();
                     }
@@ -235,8 +236,9 @@ public class WorkoutActivity extends AppCompatActivity {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.toString().equals("")) s = "0";
                         db.collection("users").document(user.getUid())
-                                .update("weeks.WEEK " + (weekNumExtra) + ".days.DAY " + (dayNumExtra) + ".exercises" + exercise + ".sets.set " + (jNum) + ".weight", Integer.parseInt(s.toString()));
+                                .update("weeks.WEEK " + (weekNumExtra) + ".days.DAY " + (dayNumExtra) + ".exercises." + exercise + ".sets.set " + (jNum) + ".weight", Integer.parseInt(s.toString()));
                         editor.putString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + jNum, s.toString());
                         editor.apply();
                     }
