@@ -161,7 +161,7 @@ public class WorkoutActivity extends AppCompatActivity {
                     lbsInput.put(exercise, innerMap = new HashMap<>());
                 }
                 innerMap.put("set " + j, defaultEditText(String.valueOf(temp), 16, 3));
-                statLayout.addView(lbsInput.get(exercise).get("set " + j));
+                statLayout.addView(lbsInput.get(exercise).get("set " + j), exerciseStatParams);
 
                 // Grab and set the current weeks saved reps
                 temp = workoutPreferences.getString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "reps" + j, "");
