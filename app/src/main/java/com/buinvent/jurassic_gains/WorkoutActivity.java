@@ -249,6 +249,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
     // Function that will return an EditText that has the parameters needed in many places
     private EditText defaultEditText(String text, int textSize, int maxLength) {
+        if (text.equals("0")) text = "";
         EditText editText = new EditText(this);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText.setGravity(Gravity.CENTER);
