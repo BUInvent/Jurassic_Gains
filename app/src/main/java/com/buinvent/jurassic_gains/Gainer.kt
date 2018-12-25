@@ -44,7 +44,12 @@ class Gainer(val weeks: @RawValue HashMap<String, Any>?) : Parcelable {
         val days = week["days"] as HashMap<*, *>
         val day = days["DAY " + dayNum] as HashMap<*, *>
         val exercises = day["exercises"] as HashMap<*, *>
-        return ArrayList(exercises.keys) as ArrayList<String?>
+        val exerciseNames = ArrayList<String?>()
+        for (i in exercises.keys){
+            val exName = exercises[i] as HashMap<*, *>
+            exerciseNames.add(exName["name"] as String)
+        }
+        return exerciseNames
     }
 
     fun getExerciseSets(weekNum: Int, dayNum: Int, exerciseName: String): HashMap<String, HashMap<String, Int>?> {
