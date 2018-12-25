@@ -265,7 +265,7 @@ public class WeekActivity extends AppCompatActivity {
                 HashMap<String, Object> exerciseMap = new HashMap<>();
                 exerciseMap.put("sets", setsMap);
                 exerciseMap.put("name", EXERCISES[i][j]);
-                exercisesMap.put("exercise " + String.valueOf(j + 1), exerciseMap);
+                exercisesMap.put("exercise " + j, exerciseMap);
             }
 
             HashMap<String, Object> dayMap = new HashMap<>();

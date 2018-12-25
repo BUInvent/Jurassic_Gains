@@ -67,7 +67,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
             for (int i = 0; i < exercises.size(); i++) {
                 String exercise = (String) exercises.get(i);
-                HashMap<String, HashMap<String, Integer>> exerciseSets = gainer.getExerciseSets(weekNumExtra, dayNumExtra, "exercise " + String.valueOf(i + 1));
+                HashMap<String, HashMap<String, Integer>> exerciseSets = gainer.getExerciseSets(weekNumExtra, dayNumExtra, "exercise " + i);
 
                 for (int j = 1; j <= exerciseSets.size(); j++) {
                     editor.putString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + j, String.valueOf(exerciseSets.get("set " + j).get("weight")));
@@ -135,7 +135,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
             subLinearLayout.addView(statLabelLayout, linearLayoutParams);
 
-            HashMap<String, HashMap<String, Integer>> exerciseSets = gainer.getExerciseSets(weekNumExtra, dayNumExtra, "exercise " + String.valueOf(i + 1));
+            HashMap<String, HashMap<String, Integer>> exerciseSets = gainer.getExerciseSets(weekNumExtra, dayNumExtra, "exercise " + i);
 
             // For every set
             for (int j = 1; j <= exerciseSets.size(); j++) {
@@ -187,7 +187,7 @@ public class WorkoutActivity extends AppCompatActivity {
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (s.toString().equals("")) s = "0";
                         db.collection("users").document(user.getUid())
-                                .update("weeks.WEEK " + (weekNumExtra) + ".days.DAY " + (dayNumExtra) + ".exercises.exercise " + String.valueOf(iNum + 1) + ".sets.set " + (jNum) + ".reps", Integer.parseInt(s.toString()));
+                                .update("weeks.WEEK " + (weekNumExtra) + ".days.DAY " + (dayNumExtra) + ".exercises.exercise " + iNum + ".sets.set " + jNum + ".reps", Integer.parseInt(s.toString()));
                         editor.putString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "reps" + jNum, s.toString());
                         editor.apply();
                     }
@@ -207,7 +207,7 @@ public class WorkoutActivity extends AppCompatActivity {
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (s.toString().equals("")) s = "0";
                         db.collection("users").document(user.getUid())
-                                .update("weeks.WEEK " + (weekNumExtra) + ".days.DAY " + (dayNumExtra) + ".exercises.exercise " + String.valueOf(iNum + 1) + ".sets.set " + (jNum) + ".weight", Integer.parseInt(s.toString()));
+                                .update("weeks.WEEK " + (weekNumExtra) + ".days.DAY " + (dayNumExtra) + ".exercises.exercise " + iNum + ".sets.set " + (jNum) + ".weight", Integer.parseInt(s.toString()));
                         editor.putString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + jNum, s.toString());
                         editor.apply();
                     }
