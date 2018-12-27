@@ -87,6 +87,10 @@ public class DayActivity extends AppCompatActivity {
 //            if (firstTime) workoutDayBox[i].setChecked(dayChecks[i]);
             workoutDayBox[i].setChecked(dayPreferences.getBoolean("WEEK " + weekNum + workoutDay, false));
 
+            // disable workout day buttons and boxes if there are no exercises on those days
+            workoutDayButton[i].setEnabled( gainer.getExercises(weekNum, (i + 1)).size() > 0);
+            workoutDayBox[i].setEnabled( gainer.getExercises(weekNum, (i + 1)).size() > 0);
+
             // Set a clicklistener for the check box that saves the state of the check box
             workoutDayBox[i].setOnClickListener((View v) -> {
 
