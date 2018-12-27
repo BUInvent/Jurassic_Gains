@@ -18,16 +18,12 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.Space;
 import android.widget.TextView;
 
-import com.google.common.primitives.Ints;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static java.lang.Math.toIntExact;
 
 public class WorkoutActivity extends AppCompatActivity {
 
@@ -154,7 +150,11 @@ public class WorkoutActivity extends AppCompatActivity {
                 statLayout.addView(previousText, exercisePrevParams);
 
                 // Grab and set the previous weight and reps
-                previousText.setText("None");
+                String previousWeight = workoutPreferences.getString("WEEK " + (weekNumExtra - 1) + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + j, "");
+                String previousReps = workoutPreferences.getString("WEEK " + (weekNumExtra - 1) + "DAY " + dayNumExtra + "Exercise " + exercise + "reps" + j, "");
+                if(!previousWeight.equals("") && !previousReps.equals("") && !previousWeight.equals("0") && !previousReps.equals("0")) previousText.setText(previousWeight + "x" + previousReps);
+                else previousText.setText("None");
+
                 String temp = workoutPreferences.getString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + j, "");
 
                 HashMap<String, EditText> innerMap = lbsInput.get(exercise);

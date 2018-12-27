@@ -49,7 +49,6 @@ class Gainer(val weeks: @RawValue HashMap<String, Any>?) : Parcelable {
             val exName = exercises["exercise " + i] as HashMap<*, *>
             exerciseNames.add(exName["name"] as String)
         }
-        println("exercise names = " + exerciseNames)
         return exerciseNames
     }
 
