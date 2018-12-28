@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,33 +19,81 @@ import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 
 // Activity for the screen that gives users the ability to select the week they're training
 public class WeekActivity extends AppCompatActivity {
 
     public static final int WEEKS_NUM = 12;  // Number of weeks for training
+    public static final int SET_NUM = 3;
+    public static final String[][] EXERCISES = new String[][]{
+            {"Bench Press", "Skull Crushers", "Flys", "Incline Bench Press"},
+            {"Chin-Ups", "Bicep Curls", "Bent Over Rows", "Lat Pulldown"},
+            {},
+            {"Squats", "Leg Extensions", "Leg Curls", "Calf Raises"},
+            {"Shoulder Press", "Side Lateral Raise", "Upright Rows", "Seated Bent Over Flys"},
+            {},
+            {}
+    };
+
     public static final String WEEK_PREFERENCES = "WEEK_PREFERENCES";
     SharedPreferences weekPreferences;
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    DocumentReference userRef = db.collection("users").document(user.getUid());
+
+    Gainer gainer;
+    Boolean[] weekChecks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_week);
 
-        LinearLayout mLinearLayout = findViewById(R.id.week_layout);
         weekPreferences = getSharedPreferences(WEEK_PREFERENCES, Context.MODE_PRIVATE);
+
+        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                if (documentSnapshot.exists()) {
+                    gainer = documentSnapshot.toObject(Gainer.class);
+                    weekChecks = gainer.getWeekChecks();
+                    addLayout(weekChecks);
+                } else createBlankDoc(user.getUid());
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("it failed", "Error getting document", e);
+                    }
+                });
+
+    }
+
+    private void addLayout(Boolean[] weekChecks) {
+
+        CheckBox[] checkBoxes = new CheckBox[weekChecks.length];
+        Button[] buttons = new Button[weekChecks.length];
+        LinearLayout mLinearLayout = findViewById(R.id.week_layout);
 
         LayoutParams weekLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, 0, 1);
         LayoutParams checkBoxLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
         LayoutParams buttonLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 
-        // Declare and Initialize checkbox and button variables to be size of the number of weeks
-        CheckBox[] checkBoxes = new CheckBox[WEEKS_NUM];
-        Button[] buttons = new Button[WEEKS_NUM];
-
-        for (int i = 0; i < WEEKS_NUM; i++) {
+        for (int i = 0; i < weekChecks.length; i++) {
 
             LinearLayout weekLayout = new LinearLayout(this);
             weekLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -57,7 +106,7 @@ public class WeekActivity extends AppCompatActivity {
             weekLayout.addView(checkBoxes[i], checkBoxLayoutParams);
 
             // Set the checkbox to be checked or unchecked based on what was previously saved
-            checkBoxes[i].setChecked(weekPreferences.getBoolean("checkbox_week" + Integer.toString(i + 1), false));
+            checkBoxes[i].setChecked(weekChecks[i]);
 
             // Add a button and set the text for each week
             buttons[i] = new Button(this);
@@ -65,8 +114,9 @@ public class WeekActivity extends AppCompatActivity {
             buttons[i].setGravity(Gravity.CENTER);
             String weekText = "WEEK " + String.valueOf(i + 1);
             buttons[i].setText(weekText);
+            final int weekNum = i + 1;
             // Set a click listener that will start the Day activity and send the week's text
-            buttons[i].setOnClickListener(view -> setDay(weekText));
+            buttons[i].setOnClickListener(view -> setDay(weekNum));
             weekLayout.addView(buttons[i], buttonLayoutParams);
 
             // Do a checkbox listener if i > 1. This is because you need three checkboxes to run
@@ -75,7 +125,7 @@ public class WeekActivity extends AppCompatActivity {
                 checkBoxListener(i, checkBoxes[i - 1], checkBoxes[i - 2], checkBoxes[i], buttons[i]);
             }
 
-            // If the previous checkbox wasn't checked, dis the checkbox and buttons
+            // If the previous checkbox wasn't checked, uncheck the checkbox and buttons
             if (i != 0 && !checkBoxes[i - 1].isChecked()) {
                 checkBoxes[i].setEnabled(false);
                 buttons[i].setEnabled(false);
@@ -91,10 +141,8 @@ public class WeekActivity extends AppCompatActivity {
         // Add checkbox listener for the first week's checkbox
         checkBoxListener(checkBoxes[0], checkBoxes[1], buttons[1]);
         // Add a checkbox listener for the last week's checkbox
-        checkBoxListener(checkBoxes[WEEKS_NUM - 1], checkBoxes[WEEKS_NUM - 2]);
-
+        checkBoxListener(checkBoxes[weekChecks.length - 1], checkBoxes[weekChecks.length - 2], weekChecks.length);
     }
-
 
     //    This is for all weeks that are not first or last
     private void checkBoxListener(final int weekNum, final CheckBox currentCheckBox,
@@ -109,6 +157,9 @@ public class WeekActivity extends AppCompatActivity {
             previousCheckBox.setEnabled(!currentCheckBox.isChecked());
 
             // Save the state of the current checkbox
+            db.collection("users").document(user.getUid())
+                    .update("weeks.WEEK " + (weekNum) + ".checked", currentCheckBox.isChecked()
+                    );
             SharedPreferences.Editor editor = weekPreferences.edit();
             editor.putBoolean("checkbox_week" + Integer.toString(weekNum), currentCheckBox.isChecked());
             editor.apply();
@@ -123,6 +174,8 @@ public class WeekActivity extends AppCompatActivity {
             nextCheckBox.setEnabled(currentCheckBox.isChecked());
             nextButton.setEnabled(currentCheckBox.isChecked());
 
+            db.collection("users").document(user.getUid())
+                    .update("weeks.WEEK 1.checked", currentCheckBox.isChecked());
             SharedPreferences.Editor editor = weekPreferences.edit();
             editor.putBoolean("checkbox_week1", currentCheckBox.isChecked());
             editor.apply();
@@ -130,21 +183,24 @@ public class WeekActivity extends AppCompatActivity {
     }
 
     //    For the last week since it doesn't have a next week
-    private void checkBoxListener(final CheckBox currentCheckBox, final CheckBox previousCheckBox) {
+    private void checkBoxListener(final CheckBox currentCheckBox, final CheckBox previousCheckBox, final int weeksLength) {
 
         currentCheckBox.setOnClickListener((View v) -> {
             previousCheckBox.setEnabled(!currentCheckBox.isChecked());
 
+            db.collection("users").document(user.getUid())
+                    .update("weeks.WEEK " + weeksLength + ".checked", currentCheckBox.isChecked());
             SharedPreferences.Editor editor = weekPreferences.edit();
-            editor.putBoolean("checkbox_week" + Integer.toString(WEEKS_NUM), currentCheckBox.isChecked());
+            editor.putBoolean("checkbox_week" + weeksLength, currentCheckBox.isChecked());
             editor.apply();
         });
     }
 
     // Function to start the Day Activity
-    private void setDay(final String week) {
+    private void setDay(final int weekNum) {
         Intent day = new Intent(getApplicationContext(), DayActivity.class);
-        day.putExtra(DayActivity.EXTRA_WEEK, week); // Send the week so the day activity knows what week was selected
+        day.putExtra(DayActivity.EXTRA_WEEK, weekNum); // Send the week so the day activity knows what week was selected
+        day.putExtra(DayActivity.EXTRA_GAINER, gainer);
         startActivity(day);
     }
 
@@ -170,6 +226,82 @@ public class WeekActivity extends AppCompatActivity {
                     });
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void createBlankDoc(String userID) {
+
+        HashMap<String, HashMap> setsMap = new HashMap<>();
+
+        HashMap<String, Integer> setMap = new HashMap<>();
+        setMap.put("weight", 0);
+        setMap.put("reps", 0);
+
+        for (int i = 1; i <= SET_NUM; i++) {
+            setsMap.put("set " + i, setMap);
+        }
+
+        HashMap<String, HashMap> daysMap = new HashMap<>();
+
+        for (int i = 0; i < EXERCISES.length; i++) {
+
+            HashMap<String, HashMap> exercisesMap = new HashMap<>();
+            for (int j = 0; j < EXERCISES[i].length; j++) {
+                HashMap<String, Object> exerciseMap = new HashMap<>();
+                exerciseMap.put("sets", setsMap);
+                exerciseMap.put("name", EXERCISES[i][j]);
+                exercisesMap.put("exercise " + j, exerciseMap);
+            }
+
+            HashMap<String, Object> dayMap = new HashMap<>();
+            dayMap.put("checked", false);
+            dayMap.put("exercises", exercisesMap);
+
+            daysMap.put("DAY " + (i + 1), dayMap);
+        }
+
+        HashMap<String, Object> weekMap = new HashMap<>();
+        weekMap.put("checked", false);
+        weekMap.put("days", daysMap);
+
+        HashMap<String, HashMap> weeksMap = new HashMap<>();
+        for (int i = 0; i < WEEKS_NUM; i++) {
+            weeksMap.put("WEEK " + (i + 1), weekMap);
+        }
+
+        HashMap<String, HashMap> docMap = new HashMap<>();
+        docMap.put("weeks", weeksMap);
+
+        // Add a new document with the user's ID
+        db.collection("users")
+                .document(userID)
+                .set(docMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Success", "DocumentSnapshot successfully written!");
+                        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot innerDocumentSnapshot) {
+                                gainer = innerDocumentSnapshot.toObject(Gainer.class);
+                                weekChecks = gainer.getWeekChecks();
+                                addLayout(weekChecks);
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Failure", "Error writing document", e);
+                    }
+                });
+    }
+
+    // If user hits back button on bottom (otherwise will go to blank screen)
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, AuthActivity.class));
+        super.onRestart();
     }
 
 }

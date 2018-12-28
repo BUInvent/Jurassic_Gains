@@ -18,11 +18,23 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.Space;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class WorkoutActivity extends AppCompatActivity {
 
     public static final String EXTRA_DAY = "com.buinvent.jurassic_gains.DAY";
     public static final String WORKOUT_PREFERENCES = "WORKOUT_PREFERENCES";
     public static final int SET_NUM = 3;
+    SharedPreferences workoutPreferences;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private static FirebaseUser previousUser = null;
+    private static ArrayList FIRST_TIME = new ArrayList();
 
 
     @Override
@@ -32,9 +44,34 @@ public class WorkoutActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // this is to enable back button
 
         // Get the day that was selected
-        Intent dayNumIntent = getIntent();
-        String weekExtra = dayNumIntent.getStringExtra(DayActivity.EXTRA_WEEK);
-        String dayExtra = dayNumIntent.getStringExtra(EXTRA_DAY);
+        Intent dayIntent = getIntent();
+        int weekNumExtra = dayIntent.getIntExtra(DayActivity.EXTRA_WEEK, 1);
+        int dayNumExtra = dayIntent.getIntExtra(EXTRA_DAY, 1);
+        Gainer gainer = dayIntent.getParcelableExtra(DayActivity.EXTRA_GAINER);
+
+        if (previousUser != user) {
+            previousUser = user;
+            FIRST_TIME.clear();
+        }
+
+        ArrayList exercises = gainer.getExercises(weekNumExtra, dayNumExtra);
+        workoutPreferences = getSharedPreferences(WORKOUT_PREFERENCES, Context.MODE_PRIVATE);
+
+        if (!FIRST_TIME.contains("week " + weekNumExtra + "day " + dayNumExtra)) {
+            FIRST_TIME.add("week " + weekNumExtra + "day " + dayNumExtra);
+            SharedPreferences.Editor editor = workoutPreferences.edit();
+
+            for (int i = 0; i < exercises.size(); i++) {
+                String exercise = (String) exercises.get(i);
+                HashMap<String, HashMap<String, Integer>> exerciseSets = gainer.getExerciseSets(weekNumExtra, dayNumExtra, "exercise " + i);
+
+                for (int j = 1; j <= exerciseSets.size(); j++) {
+                    editor.putString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + j, String.valueOf(exerciseSets.get("set " + j).get("weight")));
+                    editor.putString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "reps" + j, String.valueOf(exerciseSets.get("set " + j).get("reps")));
+                }
+            }
+            editor.apply();
+        }
 
         // Set layout parameters
         LayoutParams linearLayoutParams = new LayoutParams(-1, -2, 1);
@@ -46,34 +83,18 @@ public class WorkoutActivity extends AppCompatActivity {
 
         // Set the text at the top to the day that was selected
         TextView topText = findViewById(R.id.dayText);
-        topText.setText(dayExtra);
+        topText.setText("DAY " + dayNumExtra);
 
         allWeightTextParams.setMargins(50, 0, 0, 0);
 
-        // Set the exercises based on the day that the user selected
-        String[] exercises;
-        if(dayExtra.equals(getResources().getString(R.string.day1))){
-            exercises = new String[]{"Bench Press", "Skull Crushers", "Flyes", "Incline Bench Press"};
-        }
-        else if(dayExtra.equals(getResources().getString(R.string.day2))){
-            exercises = new String[]{"Chin-Ups", "Bicep Curls", "Bent Over Rows", "Lat Pulldown"};
-        }
-        else if(dayExtra.equals(getResources().getString(R.string.day4))){
-            exercises = new String[]{"Squats", "Leg Extensions", "Leg Curls", "Calf Raises"};
-        }
-        else if(dayExtra.equals(getResources().getString(R.string.day5))){
-            exercises = new String[]{"Shoulder Press", "Side Lateral Raise", "Upright Rows", "Seated Bent Over Flys"};
-        }
-        else{ exercises = new String[0]; }
-
-        EditText[][] lbsInput = new EditText[exercises.length][SET_NUM];
+        HashMap<String, HashMap<String, EditText>> lbsInput = new HashMap<>();
         LinearLayout mLinearLayout = findViewById(R.id.workout_layout);
 
         // For every exercise
-        for(int i = 0; i < exercises.length; i++){
+        for (int i = 0; i < exercises.size(); i++) {
 
-            final int iNum = i;
             // Create a sub layout for every exercise
+            final int iNum = i;
             LinearLayout subLinearLayout = new LinearLayout(this);
             subLinearLayout.setGravity(Gravity.CENTER);
             subLinearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -84,7 +105,8 @@ public class WorkoutActivity extends AppCompatActivity {
             workoutLayout.setOrientation(LinearLayout.HORIZONTAL);
             workoutLayout.addView(new Space(this), 40, LayoutParams.MATCH_PARENT);
 
-            TextView exerciseText = defaultTextView(exercises[i], 18);
+            String exercise = (String) exercises.get(i);
+            TextView exerciseText = defaultTextView(exercise, 18);
             exerciseText.setTypeface(Typeface.DEFAULT_BOLD);
             workoutLayout.addView(exerciseText, exerciseTextParams);
 
@@ -109,8 +131,10 @@ public class WorkoutActivity extends AppCompatActivity {
 
             subLinearLayout.addView(statLabelLayout, linearLayoutParams);
 
+            HashMap<String, HashMap<String, Integer>> exerciseSets = gainer.getExerciseSets(weekNumExtra, dayNumExtra, "exercise " + i);
+
             // For every set
-            for(int j=0; j<SET_NUM; j++){
+            for (int j = 1; j <= exerciseSets.size(); j++) {
 
                 final int jNum = j;
                 // Stat layout is the actual set #, the previous, and user input for lbs and reps
@@ -120,28 +144,29 @@ public class WorkoutActivity extends AppCompatActivity {
                 statLayout.addView(new Space(this), 30, LayoutParams.MATCH_PARENT);
 
                 // Add the set number
-                statLayout.addView(defaultTextView(Integer.toString(j+1), 16), repNumParams);
+                statLayout.addView(defaultTextView(Integer.toString(j), 16), repNumParams);
 
                 TextView previousText = defaultTextView("", 16);
                 statLayout.addView(previousText, exercisePrevParams);
 
                 // Grab and set the previous weight and reps
-                SharedPreferences workoutPreferences = getSharedPreferences(WORKOUT_PREFERENCES, Context.MODE_PRIVATE);
-                String previousWeight = workoutPreferences.getString((Integer.valueOf(weekExtra) - 1) + exercises[iNum] + "weight" + (jNum+1), "None");
-                String previousReps = workoutPreferences.getString((Integer.valueOf(weekExtra) - 1) + exercises[iNum] + "reps" + (jNum+1), "8");
-                if(previousWeight.equals("None"))
-                    previousText.setText("None");
-                else
-                    previousText.setText(previousWeight + " x " + previousReps);
+                String previousWeight = workoutPreferences.getString("WEEK " + (weekNumExtra - 1) + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + j, "");
+                String previousReps = workoutPreferences.getString("WEEK " + (weekNumExtra - 1) + "DAY " + dayNumExtra + "Exercise " + exercise + "reps" + j, "");
+                if(!previousWeight.equals("") && !previousReps.equals("") && !previousWeight.equals("0") && !previousReps.equals("0")) previousText.setText(previousWeight + "x" + previousReps);
+                else previousText.setText("None");
 
-                // Grab and set the current weeks saved weight
-                String temp = workoutPreferences.getString(weekExtra + exercises[iNum] + "weight" + (jNum+1), "");
-                lbsInput[i][j] = defaultEditText(temp, 16, 3);
-                statLayout.addView(lbsInput[i][j], exerciseStatParams);
+                String temp = workoutPreferences.getString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + j, "");
+
+                HashMap<String, EditText> innerMap = lbsInput.get(exercise);
+                if (innerMap == null) {
+                    lbsInput.put(exercise, innerMap = new HashMap<>());
+                }
+                innerMap.put("set " + j, defaultEditText(String.valueOf(temp), 16, 3));
+                statLayout.addView(lbsInput.get(exercise).get("set " + j), exerciseStatParams);
 
                 // Grab and set the current weeks saved reps
-                temp = workoutPreferences.getString(weekExtra + exercises[iNum] + "reps" + (jNum+1), "8");
-                EditText repsInput = defaultEditText(temp, 16, 2);
+                temp = workoutPreferences.getString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "reps" + j, "");
+                EditText repsInput = defaultEditText(String.valueOf(temp), 16, 2);
                 statLayout.addView(repsInput, exerciseStatParams);
                 statLayout.addView(new Space(this), 30, LayoutParams.MATCH_PARENT);
 
@@ -150,24 +175,40 @@ public class WorkoutActivity extends AppCompatActivity {
                 // Save the reps if text changes
                 SharedPreferences.Editor editor = workoutPreferences.edit();
                 repsInput.addTextChangedListener(new TextWatcher() {
-                    @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                    @Override public void afterTextChanged(Editable s) {}
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        editor.putString(weekExtra + exercises[iNum] + "reps" + (jNum+1), s.toString());
+                        if (s.toString().equals("")) s = "0";
+                        db.collection("users").document(user.getUid())
+                                .update("weeks.WEEK " + (weekNumExtra) + ".days.DAY " + (dayNumExtra) + ".exercises.exercise " + iNum + ".sets.set " + jNum + ".reps", Integer.parseInt(s.toString()));
+                        editor.putString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "reps" + jNum, s.toString());
                         editor.apply();
                     }
                 });
 
                 // Save the weight if text changes
-                lbsInput[i][j].addTextChangedListener(new TextWatcher() {
-                    @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                    @Override public void afterTextChanged(Editable s) {}
+                lbsInput.get(exercise).get("set " + j).addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        editor.putString(weekExtra + exercises[iNum] + "weight" + (jNum+1), s.toString());
+                        if (s.toString().equals("")) s = "0";
+                        db.collection("users").document(user.getUid())
+                                .update("weeks.WEEK " + (weekNumExtra) + ".days.DAY " + (dayNumExtra) + ".exercises.exercise " + iNum + ".sets.set " + (jNum) + ".weight", Integer.parseInt(s.toString()));
+                        editor.putString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + jNum, s.toString());
                         editor.apply();
                     }
                 });
@@ -178,13 +219,18 @@ public class WorkoutActivity extends AppCompatActivity {
 
             // All Weight Text will set the weight for all weight boxes if user changes
             allWeightText.addTextChangedListener(new TextWatcher() {
-                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                @Override public void afterTextChanged(Editable s) {}
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    for(int j=0; j<SET_NUM; j++)
-                        lbsInput[iNum][j].setText(s);
+                    for (int j = 1; j <= exerciseSets.size(); j++)
+                        lbsInput.get(exercise).get("set " + j).setText(s);
                 }
             });
 
@@ -193,7 +239,7 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
     // Function that will return a TextView that has the parameters needed in many places
-    private TextView defaultTextView (String text, int textSize){
+    private TextView defaultTextView(String text, int textSize) {
         TextView textView = new TextView(this);
         textView.setText(text);
         textView.setGravity(Gravity.CENTER);
@@ -203,19 +249,20 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
     // Function that will return an EditText that has the parameters needed in many places
-    private EditText defaultEditText (String text, int textSize, int maxLength){
+    private EditText defaultEditText(String text, int textSize, int maxLength) {
+        if (text.equals("0")) text = "";
         EditText editText = new EditText(this);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText.setGravity(Gravity.CENTER);
         editText.setTextSize(textSize);
-        editText.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(maxLength)});
+        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
         editText.setText(text);
         return editText;
     }
 
     // This was needed for back button
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         finish();
         return true;
     }

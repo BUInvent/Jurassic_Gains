@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:orientation="vertical"
-tools:context=".DayActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".DayActivity">
 
-    <LinearLayout android:id="@+id/day_layout"
+    <LinearLayout
+        android:id="@+id/day_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/activity_vertical_margin"
-        android:paddingRight="@dimen/activity_vertical_margin"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin">
 
         <TextView
             android:id="@+id/weekText"
@@ -29,19 +30,21 @@ tools:context=".DayActivity">
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <CheckBox
                 android:id="@+id/checkbox_day1"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:gravity="center"
                 android:scaleX="1.3"
-                android:scaleY="1.3"/>
+                android:scaleY="1.3" />
+
             <Button
                 android:id="@+id/button_day1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="@string/day1"/>
+                android:text="@string/day1"
+                android:textSize="20sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -49,19 +52,21 @@ tools:context=".DayActivity">
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <CheckBox
                 android:id="@+id/checkbox_day2"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:gravity="center"
                 android:scaleX="1.3"
-                android:scaleY="1.3"/>
+                android:scaleY="1.3" />
+
             <Button
                 android:id="@+id/button_day2"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="@string/day2"/>
+                android:text="@string/day2"
+                android:textSize="20sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -69,14 +74,21 @@ tools:context=".DayActivity">
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/checkbox_day3"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:scaleX="1.3"
+                android:scaleY="1.3" />
 
             <Button
-                android:layout_width="match_parent"
+                android:id="@+id/button_day3"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="32dp"
-                android:text="@string/day3"
                 android:textSize="20sp"
-                android:enabled="false"/>
+                android:text="@string/day3"/>
         </LinearLayout>
 
         <LinearLayout
@@ -84,19 +96,21 @@ tools:context=".DayActivity">
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <CheckBox
                 android:id="@+id/checkbox_day4"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:gravity="center"
                 android:scaleX="1.3"
-                android:scaleY="1.3"/>
+                android:scaleY="1.3" />
+
             <Button
                 android:id="@+id/button_day4"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="@string/day4"/>
+                android:text="@string/day4"
+                android:textSize="20sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -104,19 +118,21 @@ tools:context=".DayActivity">
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <CheckBox
                 android:id="@+id/checkbox_day5"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:gravity="center"
                 android:scaleX="1.3"
-                android:scaleY="1.3"/>
+                android:scaleY="1.3" />
+
             <Button
                 android:id="@+id/button_day5"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="@string/day5"/>
+                android:text="@string/day5"
+                android:textSize="20sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -125,13 +141,20 @@ tools:context=".DayActivity">
             android:layout_weight="1"
             android:orientation="horizontal">
 
+            <CheckBox
+                android:id="@+id/checkbox_day6"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:scaleX="1.3"
+                android:scaleY="1.3" />
+
             <Button
+                android:id="@+id/button_day6"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="32dp"
                 android:text="@string/day6"
-                android:textSize="20sp"
-                android:enabled="false"/>
+                android:textSize="20sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -140,13 +163,20 @@ tools:context=".DayActivity">
             android:layout_weight="1"
             android:orientation="horizontal">
 
+            <CheckBox
+                android:id="@+id/checkbox_day7"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:scaleX="1.3"
+                android:scaleY="1.3" />
+
             <Button
+                android:id="@+id/button_day7"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="32dp"
                 android:text="@string/day7"
-                android:textSize="20sp"
-                android:enabled="false"/>
+                android:textSize="20sp" />
         </LinearLayout>
 
     </LinearLayout>
