@@ -71,8 +71,7 @@ public class WeekActivity extends AppCompatActivity {
                     gainer = documentSnapshot.toObject(Gainer.class);
                     weekChecks = gainer.getWeekChecks();
                     addLayout(weekChecks);
-                }
-                else createBlankDoc(user.getUid());
+                } else createBlankDoc(user.getUid());
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
@@ -296,6 +295,13 @@ public class WeekActivity extends AppCompatActivity {
                         Log.w("Failure", "Error writing document", e);
                     }
                 });
+    }
+
+    // If user hits back button on bottom (otherwise will go to blank screen)
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, AuthActivity.class));
+        super.onRestart();
     }
 
 }
