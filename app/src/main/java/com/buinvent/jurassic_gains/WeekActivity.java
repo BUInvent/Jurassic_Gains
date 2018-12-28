@@ -29,7 +29,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 
 // Activity for the screen that gives users the ability to select the week they're training
@@ -72,22 +71,8 @@ public class WeekActivity extends AppCompatActivity {
                     gainer = documentSnapshot.toObject(Gainer.class);
                     weekChecks = gainer.getWeekChecks();
                     addLayout(weekChecks);
-                } else {
-
-                    createBlankDoc(user.getUid());
-                    try { TimeUnit.SECONDS.sleep(7);
-                    } catch (InterruptedException e) {
-                        System.out.println("got interrupted!"); }
-
-                    userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot innerDocumentSnapshot) {
-                            gainer = innerDocumentSnapshot.toObject(Gainer.class);
-                            weekChecks = gainer.getWeekChecks();
-                            addLayout(weekChecks);
-                        }
-                    });
                 }
+                else createBlankDoc(user.getUid());
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
@@ -295,6 +280,14 @@ public class WeekActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("Success", "DocumentSnapshot successfully written!");
+                        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot innerDocumentSnapshot) {
+                                gainer = innerDocumentSnapshot.toObject(Gainer.class);
+                                weekChecks = gainer.getWeekChecks();
+                                addLayout(weekChecks);
+                            }
+                        });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
