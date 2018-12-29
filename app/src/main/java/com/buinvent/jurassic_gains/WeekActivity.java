@@ -142,6 +142,11 @@ public class WeekActivity extends AppCompatActivity {
         checkBoxListener(checkBoxes[0], checkBoxes[1], buttons[1]);
         // Add a checkbox listener for the last week's checkbox
         checkBoxListener(checkBoxes[weekChecks.length - 1], checkBoxes[weekChecks.length - 2], weekChecks.length);
+
+        // Add routine button
+        Button routineButton = new Button(this);
+        routineButton.setText("CREATE ROUTINE");
+        mLinearLayout.addView(routineButton);
     }
 
     //    This is for all weeks that are not first or last
