@@ -146,6 +146,13 @@ public class WeekActivity extends AppCompatActivity {
         // Add routine button
         Button routineButton = new Button(this);
         routineButton.setText("CREATE ROUTINE");
+        routineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), RoutineActivity.class);
+                view.getContext().startActivity(intent);
+            }
+        });
         mLinearLayout.addView(routineButton);
     }
 
