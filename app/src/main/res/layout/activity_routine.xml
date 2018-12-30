@@ -8,55 +8,72 @@
     tools:context=".RoutineActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/day1btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="DAY 1" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/day2btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="DAY 2" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/day3btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="DAY 3" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/day4btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="DAY 4" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/day5btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="DAY 5" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/day6btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="DAY 6" />
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/day7btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="DAY 7" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="15dp"
+        android:text="# OF WEEKS" />
+
     <com.travijuu.numberpicker.library.NumberPicker
         android:id="@+id/number_picker"
-        android:layout_width="130dp"
-        android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="15dp"
+        numberpicker:focusable="false"
+        numberpicker:max="30"
         numberpicker:min="0"
-        numberpicker:max="10"
-        numberpicker:value="-5"
         numberpicker:unit="1"
-        numberpicker:focusable="false" />
+        numberpicker:value="12" />
+
+    <Button
+        android:id="@+id/routinebtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CREATE ROUTINE"
+        android:textSize="25sp" />
 
 </LinearLayout>
