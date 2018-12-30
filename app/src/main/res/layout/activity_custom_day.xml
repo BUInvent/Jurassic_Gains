@@ -21,23 +21,22 @@
             android:text="Exercise" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/repsTxt"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="fill_parent"
                 android:gravity="center"
-                android:paddingLeft="16dp"
                 android:text="REPS" />
 
             <com.travijuu.numberpicker.library.NumberPicker
                 android:id="@+id/reps_picker"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingLeft="16dp"
@@ -45,13 +44,14 @@
                 numberpicker:max="30"
                 numberpicker:min="0"
                 numberpicker:unit="1"
-                numberpicker:value="12" />
+                numberpicker:value="8" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -59,22 +59,20 @@
                 android:id="@+id/setsTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
                 android:gravity="center"
-                android:paddingLeft="16dp"
                 android:text="SETS" />
 
             <com.travijuu.numberpicker.library.NumberPicker
                 android:id="@+id/sets_picker"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="16dp"
                 android:gravity="center"
+                android:paddingLeft="16dp"
                 numberpicker:focusable="false"
                 numberpicker:max="30"
                 numberpicker:min="0"
                 numberpicker:unit="1"
-                numberpicker:value="12" />
+                numberpicker:value="3" />
 
         </LinearLayout>
 
