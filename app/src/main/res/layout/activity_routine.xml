@@ -58,7 +58,7 @@
         android:text="# OF WEEKS" />
 
     <com.travijuu.numberpicker.library.NumberPicker
-        android:id="@+id/number_picker"
+        android:id="@+id/weeks_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

@@ -13,4 +13,5 @@
     <string name="day6">DAY 6</string>
     <string name="day7">DAY 7</string>
     <string name="title_activity_auth">AuthActivity</string>
+    <string name="title_activity_custom_day">CustomDayActivity</string>
 </resources>
