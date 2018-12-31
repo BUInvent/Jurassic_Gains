@@ -3,16 +3,11 @@ package com.buinvent.jurassic_gains
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import com.travijuu.numberpicker.library.NumberPicker
 import android.widget.LinearLayout.LayoutParams
-import kotlinx.android.synthetic.main.activity_custom_day.*
-import kotlinx.android.synthetic.main.activity_routine.*
 import android.text.Editable
 import android.text.TextWatcher
-
 
 
 class CustomDayActivity : AppCompatActivity() {
@@ -44,6 +39,7 @@ class CustomDayActivity : AppCompatActivity() {
             xButton.setImageResource(R.drawable.delete)
             xButton.setLayoutParams(LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
             xButton.setScaleType(ImageView.ScaleType.FIT_CENTER)
+            xButton.setOnClickListener { mLinearLayout.removeView(exerciseLayout) }
 
             val exerciseNameView = TextView(this)
             exerciseNameView.gravity = Gravity.CENTER
@@ -58,16 +54,14 @@ class CustomDayActivity : AppCompatActivity() {
     }
 
     val exerciseWatcher = object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-        }
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             val exerciseInput = exerciseName.getText().toString().trim()
             addExerciseButton.setEnabled(!exerciseInput.isEmpty())
         }
 
-        override fun afterTextChanged(s: Editable) {
-        }
+        override fun afterTextChanged(s: Editable) {}
     }
 
     // This was needed for back button
