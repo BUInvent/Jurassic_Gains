@@ -20,7 +20,7 @@
         <activity android:name=".WorkoutActivity" />
         <activity
             android:name=".RoutineActivity"
-            android:label="Customize Your Workout" />
+            android:label="Customize Your Routine" />
         <activity android:name=".CustomDayActivity" />
     </application>
 
