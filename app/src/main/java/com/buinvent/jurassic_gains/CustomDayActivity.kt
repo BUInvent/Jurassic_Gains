@@ -1,5 +1,7 @@
 package com.buinvent.jurassic_gains
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
@@ -33,6 +35,10 @@ class CustomDayActivity : AppCompatActivity() {
 
         exerciseName.addTextChangedListener(exerciseWatcher)
         addExerciseButton.setEnabled(false)
+
+        val customDayPreferences = getSharedPreferences("CUSTOM_DAY_PREFERENCES", Context.MODE_PRIVATE)
+        val editor = customDayPreferences.edit()
+
         addExerciseButton.setOnClickListener {
             val exerciseLayout = LinearLayout(this)
             val xButton = ImageButton(this)
@@ -49,6 +55,10 @@ class CustomDayActivity : AppCompatActivity() {
             exerciseLayout.addView(exerciseNameView)
 
             mLinearLayout.addView(exerciseLayout)
+            editor.putString("DAY" + dayNum + "exercise name", exerciseNameView.text.toString())
+            editor.putInt("DAY" + dayNum + "exercise" + exerciseNameView.text.toString() + "Sets", setsPicker.value)
+            editor.putInt("DAY" + dayNum + "exercise" + exerciseNameView.text.toString() + "Reps", repsPicker.value)
+
         }
 
     }
