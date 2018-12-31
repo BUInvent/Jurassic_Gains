@@ -26,18 +26,19 @@ class CustomDayActivity : AppCompatActivity() {
         val setsPicker = findViewById<NumberPicker>(R.id.sets_picker)
         val addExerciseButton = findViewById<Button>(R.id.addExercisebtn)
 
-
         val mLinearLayout = findViewById<LinearLayout>(R.id.custom_day_layout)
         val exerciseLayout = LinearLayout(this)
-
         exerciseLayout.orientation = LinearLayout.HORIZONTAL
 
-        val xButton = Button(this)
-        val exerciseNameView = TextView(this)
+        val xButton = ImageButton(this)
+        xButton.setImageResource(R.drawable.delete)
+        xButton.setLayoutParams(LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
+        xButton.setScaleType(ImageView.ScaleType.FIT_CENTER)
 
+        val exerciseNameView = TextView(this)
         exerciseNameView.gravity = Gravity.CENTER
         exerciseNameView.text = "BENCH PRESS"
-        exerciseNameView.textSize = 20f
+        exerciseNameView.textSize = 28F
         exerciseLayout.addView(xButton)
         exerciseLayout.addView(exerciseNameView)
 
