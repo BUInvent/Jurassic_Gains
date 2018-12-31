@@ -10,6 +10,7 @@ class RoutineActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_routine)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         val customDayButtons = arrayOf(
                 findViewById<Button>(R.id.day1btn),
@@ -28,6 +29,12 @@ class RoutineActivity : AppCompatActivity() {
         val customDay = Intent(applicationContext, CustomDayActivity::class.java)
         customDay.putExtra("DAY_NUM", dayNum)
         startActivity(customDay)
+    }
+
+    // This was needed for back button
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 
 }
