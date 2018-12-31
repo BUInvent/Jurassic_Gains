@@ -1,11 +1,9 @@
 package com.buinvent.jurassic_gains
 
 import android.os.Bundle
-import android.app.Activity
+import android.support.v7.app.AppCompatActivity
 
-import kotlinx.android.synthetic.main.activity_custom_day.*
-
-class CustomDayActivity : Activity() {
+class CustomDayActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

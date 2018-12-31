@@ -18,7 +18,9 @@
         <activity android:name=".WeekActivity" />
         <activity android:name=".DayActivity" />
         <activity android:name=".WorkoutActivity" />
-        <activity android:name=".RoutineActivity" />
+        <activity
+            android:name=".RoutineActivity"
+            android:label="Customize Your Workout" />
         <activity android:name=".CustomDayActivity" />
     </application>
 
