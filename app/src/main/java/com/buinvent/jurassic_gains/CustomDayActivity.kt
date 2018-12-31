@@ -38,11 +38,10 @@ class CustomDayActivity : AppCompatActivity() {
         exerciseNameView.gravity = Gravity.CENTER
         exerciseNameView.text = "BENCH PRESS"
         exerciseNameView.textSize = 20f
-        exerciseLayout.addView(xButton, LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT)
-        exerciseLayout.addView(exerciseNameView, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT)
+        exerciseLayout.addView(xButton)
+        exerciseLayout.addView(exerciseNameView)
 
-        val dayLayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, 0, 1f)
-        mLinearLayout.addView(exerciseLayout, dayLayoutParams)
+        mLinearLayout.addView(exerciseLayout)
 
     }
 
