@@ -10,6 +10,8 @@ import com.travijuu.numberpicker.library.NumberPicker
 import android.widget.LinearLayout.LayoutParams
 import android.text.Editable
 import android.text.TextWatcher
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 
 class CustomDayActivity : AppCompatActivity() {
@@ -38,6 +40,7 @@ class CustomDayActivity : AppCompatActivity() {
 
         val customDayPreferences = getSharedPreferences("CUSTOM_DAY_PREFERENCES", Context.MODE_PRIVATE)
         val editor = customDayPreferences.edit()
+        val gson = Gson()
 
         addExerciseButton.setOnClickListener {
             val exerciseLayout = LinearLayout(this)
@@ -55,12 +58,20 @@ class CustomDayActivity : AppCompatActivity() {
             exerciseLayout.addView(exerciseNameView)
 
             mLinearLayout.addView(exerciseLayout)
-            editor.putString("DAY" + dayNum + "exercise name", exerciseNameView.text.toString())
-            editor.putInt("DAY" + dayNum + "exercise" + exerciseNameView.text.toString() + "Sets", setsPicker.value)
-            editor.putInt("DAY" + dayNum + "exercise" + exerciseNameView.text.toString() + "Reps", repsPicker.value)
 
+            val exerciseMap = mapOf("exercise" to exerciseNameView.text.toString(), "sets" to setsPicker.value, "reps" to repsPicker.value)
+            val dayPrefName = "DAY" + dayNum + "exercises"
+
+            if(!customDayPreferences.contains(dayPrefName))
+                editor.putString(dayPrefName, gson.toJson(listOf(exerciseMap))).apply()
+
+            else {
+                val savedExercises = customDayPreferences.getString(dayPrefName, "")
+                val exerciseList: ArrayList<Map<String, Any>> = gson.fromJson(savedExercises, object : TypeToken<List<Map<String, Any>>>() {}.type)
+                exerciseList.add(exerciseMap)
+                editor.putString(dayPrefName, gson.toJson(exerciseList)).apply()
+            }
         }
-
     }
 
     val exerciseWatcher = object : TextWatcher {
