@@ -59,17 +59,17 @@ class CustomDayActivity : AppCompatActivity() {
 
             mLinearLayout.addView(exerciseLayout)
 
-            val exerciseMap = mapOf("exercise" to exerciseNameView.text.toString(), "sets" to setsPicker.value, "reps" to repsPicker.value)
+            val exerciseMap = mapOf("sets" to setsPicker.value, "reps" to repsPicker.value)
             val dayPrefName = "DAY" + dayNum + "exercises"
 
             if(!customDayPreferences.contains(dayPrefName))
-                editor.putString(dayPrefName, gson.toJson(listOf(exerciseMap))).apply()
+                editor.putString(dayPrefName, gson.toJson(mapOf(exerciseNameView.text.toString() to exerciseMap))).apply()
 
             else {
                 val savedExercises = customDayPreferences.getString(dayPrefName, "")
-                val exerciseList: ArrayList<Map<String, Any>> = gson.fromJson(savedExercises, object : TypeToken<List<Map<String, Any>>>() {}.type)
-                exerciseList.add(exerciseMap)
-                editor.putString(dayPrefName, gson.toJson(exerciseList)).apply()
+                val exercisesMap: HashMap<String, Any> = gson.fromJson(savedExercises, object : TypeToken<HashMap<String, Any>>() {}.type)
+                exercisesMap.put(exerciseNameView.text.toString(), exerciseMap)
+                editor.putString(dayPrefName, gson.toJson(exercisesMap)).apply()
             }
         }
     }
