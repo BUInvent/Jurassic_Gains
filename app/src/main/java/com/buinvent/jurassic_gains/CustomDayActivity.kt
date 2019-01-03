@@ -48,7 +48,14 @@ class CustomDayActivity : AppCompatActivity() {
             xButton.setImageResource(R.drawable.delete)
             xButton.setLayoutParams(LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
             xButton.setScaleType(ImageView.ScaleType.FIT_CENTER)
-            xButton.setOnClickListener { mLinearLayout.removeView(exerciseLayout) }
+            xButton.setOnClickListener {
+                mLinearLayout.removeView(exerciseLayout) // remove exercise from screen
+                // Remove the exercise from sharedpreferences
+                val savedExercises = customDayPreferences.getString("DAY" + dayNum + "exercises", "")
+                val exercisesMap: HashMap<String, Any> = gson.fromJson(savedExercises, object : TypeToken<HashMap<String, Any>>() {}.type)
+                exercisesMap.remove(exerciseName.text.toString())
+                editor.putString("DAY" + dayNum + "exercises", gson.toJson(exercisesMap)).apply()
+            }
 
             val exerciseNameView = TextView(this)
             exerciseNameView.gravity = Gravity.CENTER
