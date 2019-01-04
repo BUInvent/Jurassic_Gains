@@ -28,12 +28,10 @@ class CustomDayActivity : AppCompatActivity() {
         val dayNum = customDayIntent.getIntExtra("DAY_NUM", 1)
         setTitle("Customize Day " + dayNum)
 
-        val mLinearLayout = findViewById<LinearLayout>(R.id.custom_day_layout)
-
-        exerciseName = findViewById<EditText>(R.id.exerciseText)
+        exerciseName = findViewById(R.id.exerciseText)
         val repsPicker = findViewById<NumberPicker>(R.id.reps_picker)
         val setsPicker = findViewById<NumberPicker>(R.id.sets_picker)
-        addExerciseButton = findViewById<Button>(R.id.addExercisebtn)
+        addExerciseButton = findViewById(R.id.addExercisebtn)
 
         exerciseName.addTextChangedListener(exerciseWatcher)
         addExerciseButton.setEnabled(false)
@@ -50,60 +48,56 @@ class CustomDayActivity : AppCompatActivity() {
 
         // Add all saved exercises to layout
         for (exerciseKey in exercisesMap.keys) {
-            val exerciseLayout = LinearLayout(this)
-            val xButton = ImageButton(this)
-            xButton.setImageResource(R.drawable.delete)
-            xButton.setLayoutParams(LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
-            xButton.setScaleType(ImageView.ScaleType.FIT_CENTER)
-            xButton.setOnClickListener {
-                mLinearLayout.removeView(exerciseLayout) // remove exercise from screen
-                // Remove the exercise from sharedpreferences
-                exercisesMap.remove(exerciseKey)
-                editor.putString("DAY" + dayNum + "exercises", gson.toJson(exercisesMap)).apply()
-            }
-
-            val exerciseNameView = TextView(this)
-            exerciseNameView.gravity = Gravity.CENTER
-            exerciseNameView.text = exerciseKey
-            exerciseNameView.textSize = 28F
-            exerciseLayout.addView(xButton)
-            exerciseLayout.addView(exerciseNameView)
-
-            mLinearLayout.addView(exerciseLayout)
+            addExerciseLayout(exerciseKey, exercisesMap)
         }
 
         addExerciseButton.setOnClickListener {
-            val exerciseLayout = LinearLayout(this)
-            val xButton = ImageButton(this)
-            xButton.setImageResource(R.drawable.delete)
-            xButton.setLayoutParams(LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
-            xButton.setScaleType(ImageView.ScaleType.FIT_CENTER)
-            xButton.setOnClickListener {
-                mLinearLayout.removeView(exerciseLayout) // remove exercise from screen
-                // Remove the exercise from sharedpreferences
-                exercisesMap.remove(exerciseName.text.toString())
-                editor.putString("DAY" + dayNum + "exercises", gson.toJson(exercisesMap)).apply()
-            }
-
-            val exerciseNameView = TextView(this)
-            exerciseNameView.gravity = Gravity.CENTER
-            exerciseNameView.text = exerciseName.text
-            exerciseNameView.textSize = 28F
-            exerciseLayout.addView(xButton)
-            exerciseLayout.addView(exerciseNameView)
-
-            mLinearLayout.addView(exerciseLayout)
+            addExerciseLayout(exerciseName.text.toString(), exercisesMap)
 
             val exerciseMap = mapOf("sets" to setsPicker.value, "reps" to repsPicker.value)
             val dayPrefName = "DAY" + dayNum + "exercises"
 
             if (!customDayPreferences.contains(dayPrefName))
-                editor.putString(dayPrefName, gson.toJson(mapOf(exerciseNameView.text.toString() to exerciseMap))).apply()
+                editor.putString(dayPrefName, gson.toJson(mapOf(exerciseName.text.toString() to exerciseMap))).apply()
             else {
-                exercisesMap.put(exerciseNameView.text.toString(), exerciseMap)
+                exercisesMap.put(exerciseName.text.toString(), exerciseMap)
                 editor.putString(dayPrefName, gson.toJson(exercisesMap)).apply()
             }
+            exerciseName.text.clear()
         }
+    }
+
+    fun addExerciseLayout(exerciseName: String, exercisesMap: HashMap<String, Any>) {
+
+        val customDayPreferences = getSharedPreferences("CUSTOM_DAY_PREFERENCES", Context.MODE_PRIVATE)
+        val editor = customDayPreferences.edit()
+        val gson = Gson()
+
+        val mLinearLayout = findViewById<LinearLayout>(R.id.custom_day_layout)
+        val exerciseLayout = LinearLayout(this)
+        val xButton = ImageButton(this)
+
+        val customDayIntent = intent
+        val dayNum = customDayIntent.getIntExtra("DAY_NUM", 1)
+
+        xButton.setImageResource(R.drawable.delete)
+        xButton.setLayoutParams(LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
+        xButton.setScaleType(ImageView.ScaleType.FIT_CENTER)
+        xButton.setOnClickListener {
+            mLinearLayout.removeView(exerciseLayout) // remove exercise from screen
+            // Remove the exercise from sharedpreferences
+            exercisesMap.remove(exerciseName)
+            editor.putString("DAY" + dayNum + "exercises", gson.toJson(exercisesMap)).apply()
+        }
+
+        val exerciseNameView = TextView(this)
+        exerciseNameView.gravity = Gravity.CENTER
+        exerciseNameView.text = exerciseName
+        exerciseNameView.textSize = 28F
+        exerciseLayout.addView(xButton)
+        exerciseLayout.addView(exerciseNameView)
+
+        mLinearLayout.addView(exerciseLayout)
     }
 
     val exerciseWatcher = object : TextWatcher {
