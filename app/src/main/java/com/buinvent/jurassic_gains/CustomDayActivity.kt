@@ -1,7 +1,6 @@
 package com.buinvent.jurassic_gains
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
@@ -52,18 +51,24 @@ class CustomDayActivity : AppCompatActivity() {
         }
 
         addExerciseButton.setOnClickListener {
-            addExerciseLayout(exerciseName.text.toString(), exercisesMap)
 
-            val exerciseMap = mapOf("sets" to setsPicker.value, "reps" to repsPicker.value)
-            val dayPrefName = "DAY" + dayNum + "exercises"
+            if (exercisesMap.containsKey(exerciseName.text.toString()))
+                Toast.makeText(this@CustomDayActivity, "Exercise already made", Toast.LENGTH_SHORT).show()
 
-            if (!customDayPreferences.contains(dayPrefName))
-                editor.putString(dayPrefName, gson.toJson(mapOf(exerciseName.text.toString() to exerciseMap))).apply()
             else {
-                exercisesMap.put(exerciseName.text.toString(), exerciseMap)
-                editor.putString(dayPrefName, gson.toJson(exercisesMap)).apply()
+                addExerciseLayout(exerciseName.text.toString(), exercisesMap)
+
+                val exerciseMap = mapOf("sets" to setsPicker.value, "reps" to repsPicker.value)
+                val dayPrefName = "DAY" + dayNum + "exercises"
+
+                if (!customDayPreferences.contains(dayPrefName))
+                    editor.putString(dayPrefName, gson.toJson(mapOf(exerciseName.text.toString() to exerciseMap))).apply()
+                else {
+                    exercisesMap.put(exerciseName.text.toString(), exerciseMap)
+                    editor.putString(dayPrefName, gson.toJson(exercisesMap)).apply()
+                }
+                exerciseName.text.clear()
             }
-            exerciseName.text.clear()
         }
     }
 
