@@ -29,7 +29,6 @@ public class WorkoutActivity extends AppCompatActivity {
 
     public static final String EXTRA_DAY = "com.buinvent.jurassic_gains.DAY";
     public static final String WORKOUT_PREFERENCES = "WORKOUT_PREFERENCES";
-    public static final int SET_NUM = 3;
     SharedPreferences workoutPreferences;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

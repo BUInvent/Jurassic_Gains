@@ -108,7 +108,7 @@ class RoutineActivity : AppCompatActivity() {
                     Log.d("Success", "DocumentSnapshot successfully written!")
                     userRef.get().addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { innerDocumentSnapshot ->
                         val weekActivity = Intent(applicationContext, WeekActivity::class.java)
-//                        getSharedPreferences(WORKOUT_PREFERENCES, Context.MODE_PRIVATE).edit().clear().apply()
+                        getSharedPreferences(WORKOUT_PREFERENCES, Context.MODE_PRIVATE).edit().clear().apply()
                         startActivity(weekActivity)
                     })
                 })
