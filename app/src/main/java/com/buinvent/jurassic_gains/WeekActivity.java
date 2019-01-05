@@ -71,7 +71,7 @@ public class WeekActivity extends AppCompatActivity {
                     gainer = documentSnapshot.toObject(Gainer.class);
                     weekChecks = gainer.getWeekChecks();
                     addLayout(weekChecks);
-                } else createBlankDoc(user.getUid());
+                }
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
@@ -239,75 +239,6 @@ public class WeekActivity extends AppCompatActivity {
                     });
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void createBlankDoc(String userID) {
-
-        HashMap<String, HashMap> setsMap = new HashMap<>();
-
-        HashMap<String, Integer> setMap = new HashMap<>();
-        setMap.put("weight", 0);
-        setMap.put("reps", 0);
-
-        for (int i = 1; i <= SET_NUM; i++) {
-            setsMap.put("set " + i, setMap);
-        }
-
-        HashMap<String, HashMap> daysMap = new HashMap<>();
-
-        for (int i = 0; i < EXERCISES.length; i++) {
-
-            HashMap<String, HashMap> exercisesMap = new HashMap<>();
-            for (int j = 0; j < EXERCISES[i].length; j++) {
-                HashMap<String, Object> exerciseMap = new HashMap<>();
-                exerciseMap.put("sets", setsMap);
-                exerciseMap.put("name", EXERCISES[i][j]);
-                exercisesMap.put("exercise " + j, exerciseMap);
-            }
-
-            HashMap<String, Object> dayMap = new HashMap<>();
-            dayMap.put("checked", false);
-            dayMap.put("exercises", exercisesMap);
-
-            daysMap.put("DAY " + (i + 1), dayMap);
-        }
-
-        HashMap<String, Object> weekMap = new HashMap<>();
-        weekMap.put("checked", false);
-        weekMap.put("days", daysMap);
-
-        HashMap<String, HashMap> weeksMap = new HashMap<>();
-        for (int i = 0; i < WEEKS_NUM; i++) {
-            weeksMap.put("WEEK " + (i + 1), weekMap);
-        }
-
-        HashMap<String, HashMap> docMap = new HashMap<>();
-        docMap.put("weeks", weeksMap);
-
-        // Add a new document with the user's ID
-        db.collection("users")
-                .document(userID)
-                .set(docMap)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Success", "DocumentSnapshot successfully written!");
-                        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot innerDocumentSnapshot) {
-                                gainer = innerDocumentSnapshot.toObject(Gainer.class);
-                                weekChecks = gainer.getWeekChecks();
-                                addLayout(weekChecks);
-                            }
-                        });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("Failure", "Error writing document", e);
-                    }
-                });
     }
 
     // If user hits back button on bottom (otherwise will go to blank screen)
