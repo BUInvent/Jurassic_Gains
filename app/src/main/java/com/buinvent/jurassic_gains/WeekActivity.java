@@ -72,6 +72,20 @@ public class WeekActivity extends AppCompatActivity {
                     weekChecks = gainer.getWeekChecks();
                     addLayout(weekChecks);
                 }
+
+                // Add routine button
+                Button routineButton = new Button(getApplicationContext());
+                routineButton.setText("CREATE ROUTINE");
+                routineButton.setTextSize(30);
+                routineButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(view.getContext(), RoutineActivity.class);
+                        view.getContext().startActivity(intent);
+                    }
+                });
+                LinearLayout mLinearLayout = findViewById(R.id.week_layout);
+                mLinearLayout.addView(routineButton);
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
@@ -142,19 +156,6 @@ public class WeekActivity extends AppCompatActivity {
         checkBoxListener(checkBoxes[0], checkBoxes[1], buttons[1]);
         // Add a checkbox listener for the last week's checkbox
         checkBoxListener(checkBoxes[weekChecks.length - 1], checkBoxes[weekChecks.length - 2], weekChecks.length);
-
-        // Add routine button
-        Button routineButton = new Button(this);
-        routineButton.setText("CREATE ROUTINE");
-        routineButton.setTextSize(30);
-        routineButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), RoutineActivity.class);
-                view.getContext().startActivity(intent);
-            }
-        });
-        mLinearLayout.addView(routineButton);
     }
 
     //    This is for all weeks that are not first or last
