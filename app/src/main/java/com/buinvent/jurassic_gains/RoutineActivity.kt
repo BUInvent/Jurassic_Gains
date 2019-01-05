@@ -108,10 +108,8 @@ class RoutineActivity : AppCompatActivity() {
                 .addOnSuccessListener(OnSuccessListener<Void> {
                     Log.d("Success", "DocumentSnapshot successfully written!")
                     userRef.get().addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { innerDocumentSnapshot ->
-
-//                        gainer = innerDocumentSnapshot.toObject(Gainer::class.java)
-//                        weekChecks = gainer.getWeekChecks()
-//                        addLayout(weekChecks)
+                        val weekActivity = Intent(applicationContext, WeekActivity::class.java)
+                        startActivity(weekActivity)
                     })
                 })
                 .addOnFailureListener(OnFailureListener { e -> Log.w("Failure", "Error writing document", e) })
