@@ -65,7 +65,7 @@
         android:paddingBottom="15dp"
         numberpicker:focusable="false"
         numberpicker:max="30"
-        numberpicker:min="0"
+        numberpicker:min="2"
         numberpicker:unit="1"
         numberpicker:value="12" />
 

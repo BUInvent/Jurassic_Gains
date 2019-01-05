@@ -61,7 +61,8 @@ class RoutineActivity : AppCompatActivity() {
         for (i in 1..7) {
 
             val savedExercises = customDayPreferences.getString("DAY" + i + "exercises", "")
-            val savedExercisesMap: HashMap<String, Any> = gson.fromJson(savedExercises, object : TypeToken<HashMap<String, Any>>() {}.type)
+            var savedExercisesMap = HashMap<String, Any>()
+            if (savedExercises != "") savedExercisesMap = gson.fromJson(savedExercises, object : TypeToken<HashMap<String, Any>>() {}.type)
             val exercisesMap = HashMap<String, HashMap<*, *>>()
 
             for (exerciseKey in savedExercisesMap.keys) {
