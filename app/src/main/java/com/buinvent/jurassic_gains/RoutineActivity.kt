@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import com.buinvent.jurassic_gains.WorkoutActivity.WORKOUT_PREFERENCES
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
@@ -53,7 +54,6 @@ class RoutineActivity : AppCompatActivity() {
         val weeksNum = weeks_picker.value
 
         val customDayPreferences = getSharedPreferences("CUSTOM_DAY_PREFERENCES", Context.MODE_PRIVATE)
-        val editor = customDayPreferences.edit()
         val gson = Gson()
 
         val daysMap = HashMap<String, HashMap<*, *>>()
@@ -101,7 +101,6 @@ class RoutineActivity : AppCompatActivity() {
         docMap["weeks"] = weeksMap
 
         // Add a new document with the user's ID
-
         db.collection("users")
                 .document(userID)
                 .set(docMap)
@@ -109,6 +108,7 @@ class RoutineActivity : AppCompatActivity() {
                     Log.d("Success", "DocumentSnapshot successfully written!")
                     userRef.get().addOnSuccessListener(OnSuccessListener<DocumentSnapshot> { innerDocumentSnapshot ->
                         val weekActivity = Intent(applicationContext, WeekActivity::class.java)
+//                        getSharedPreferences(WORKOUT_PREFERENCES, Context.MODE_PRIVATE).edit().clear().apply()
                         startActivity(weekActivity)
                     })
                 })
