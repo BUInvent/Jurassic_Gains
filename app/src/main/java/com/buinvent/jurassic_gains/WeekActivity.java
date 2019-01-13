@@ -153,9 +153,11 @@ public class WeekActivity extends AppCompatActivity {
         }
 
         // Add checkbox listener for the first week's checkbox
-        checkBoxListener(checkBoxes[0], checkBoxes[1], buttons[1]);
-        // Add a checkbox listener for the last week's checkbox
-        checkBoxListener(checkBoxes[weekChecks.length - 1], checkBoxes[weekChecks.length - 2], weekChecks.length);
+        if (checkBoxes.length > 1) {
+            checkBoxListener(checkBoxes[0], checkBoxes[1], buttons[1]);
+            // Add a checkbox listener for the last week's checkbox
+            checkBoxListener(checkBoxes[weekChecks.length - 1], checkBoxes[weekChecks.length - 2], weekChecks.length);
+        }
     }
 
     //    This is for all weeks that are not first or last
