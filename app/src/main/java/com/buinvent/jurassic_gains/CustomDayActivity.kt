@@ -54,7 +54,6 @@ class CustomDayActivity : AppCompatActivity() {
 
             if (exercisesMap.containsKey(exerciseName.text.toString()))
                 Toast.makeText(this@CustomDayActivity, "Exercise already made", Toast.LENGTH_SHORT).show()
-
             else {
                 addExerciseLayout(exerciseName.text.toString(), exercisesMap)
 
@@ -63,10 +62,9 @@ class CustomDayActivity : AppCompatActivity() {
 
                 if (!customDayPreferences.contains(dayPrefName))
                     editor.putString(dayPrefName, gson.toJson(mapOf(exerciseName.text.toString() to exerciseMap))).apply()
-                else {
-                    exercisesMap.put(exerciseName.text.toString(), exerciseMap)
-                    editor.putString(dayPrefName, gson.toJson(exercisesMap)).apply()
-                }
+
+                exercisesMap.put(exerciseName.text.toString(), exerciseMap)
+                editor.putString(dayPrefName, gson.toJson(exercisesMap)).apply()
                 exerciseName.text.clear()
             }
         }
