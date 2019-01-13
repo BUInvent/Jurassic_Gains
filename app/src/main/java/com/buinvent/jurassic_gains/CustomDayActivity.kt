@@ -39,13 +39,14 @@ class CustomDayActivity : AppCompatActivity() {
         val editor = customDayPreferences.edit()
         val gson = Gson()
 
-        var exercisesMap = HashMap<String, Any>()
+        var exercisesMap = LinkedHashMap<String, Any>()
         if (customDayPreferences.contains("DAY" + dayNum + "exercises")) {
             val savedExercises = customDayPreferences.getString("DAY" + dayNum + "exercises", "")
-            exercisesMap = gson.fromJson(savedExercises, object : TypeToken<HashMap<String, Any>>() {}.type)
+            exercisesMap = gson.fromJson(savedExercises, object : TypeToken<LinkedHashMap<String, Any>>() {}.type)
         }
 
         // Add all saved exercises to layout
+        println("exercises map = " + exercisesMap)
         for (exerciseKey in exercisesMap.keys) {
             addExerciseLayout(exerciseKey, exercisesMap)
         }
@@ -70,7 +71,7 @@ class CustomDayActivity : AppCompatActivity() {
         }
     }
 
-    fun addExerciseLayout(exerciseName: String, exercisesMap: HashMap<String, Any>) {
+    fun addExerciseLayout(exerciseName: String, exercisesMap: LinkedHashMap<String, Any>) {
 
         val customDayPreferences = getSharedPreferences("CUSTOM_DAY_PREFERENCES", Context.MODE_PRIVATE)
         val editor = customDayPreferences.edit()
