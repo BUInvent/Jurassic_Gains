@@ -260,6 +260,11 @@ public class WorkoutActivity extends AppCompatActivity {
         return editText;
     }
 
+//    reset first time (this will be done when a new routine is made)
+    public static void clearFirstTime(){
+        FIRST_TIME.clear();
+    }
+
     // This was needed for back button
     @Override
     public boolean onSupportNavigateUp() {

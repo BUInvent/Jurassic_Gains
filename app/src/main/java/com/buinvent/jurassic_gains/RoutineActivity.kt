@@ -42,8 +42,6 @@ class RoutineActivity : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         val createRoutineButton = findViewById<Button>(R.id.routinebtn)
         createRoutineButton.setOnClickListener({ _ -> createBlankDoc(user!!.uid) })
-
-
     }
 
     private fun createBlankDoc(userID: String) {
@@ -73,7 +71,7 @@ class RoutineActivity : AppCompatActivity() {
                 setMap["reps"] = ((savedExercisesMap[exerciseKey] as Map<*, *>)["reps"] as Double).toInt()
 
                 val setsMap = HashMap<String, HashMap<*, *>>()
-                for (setNum in 1..((savedExercisesMap[exerciseKey] as Map<*, *>)["sets"] as Double).toInt()){
+                for (setNum in 1..((savedExercisesMap[exerciseKey] as Map<*, *>)["sets"] as Double).toInt()) {
                     setsMap["set $setNum"] = setMap
                 }
 
@@ -114,18 +112,21 @@ class RoutineActivity : AppCompatActivity() {
                     })
                 })
                 .addOnFailureListener(OnFailureListener { e -> Log.w("Failure", "Error writing document", e) })
-            }
 
-            private fun setCustomDay(dayNum: Int) {
-                val customDay = Intent(applicationContext, CustomDayActivity::class.java)
-                customDay.putExtra("DAY_NUM", dayNum)
-                startActivity(customDay)
-            }
+        WorkoutActivity.clearFirstTime()
 
-            // This was needed for back button
-            override fun onSupportNavigateUp(): Boolean {
-                finish()
-                return true
-            }
+    }
 
-        }
+    private fun setCustomDay(dayNum: Int) {
+        val customDay = Intent(applicationContext, CustomDayActivity::class.java)
+        customDay.putExtra("DAY_NUM", dayNum)
+        startActivity(customDay)
+    }
+
+    // This was needed for back button
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
+    }
+
+}
