@@ -34,18 +34,6 @@ import java.util.HashMap;
 // Activity for the screen that gives users the ability to select the week they're training
 public class WeekActivity extends AppCompatActivity {
 
-    public static final int WEEKS_NUM = 12;  // Number of weeks for training
-    public static final int SET_NUM = 3;
-    public static final String[][] EXERCISES = new String[][]{
-            {"Bench Press", "Skull Crushers", "Flys", "Incline Bench Press"},
-            {"Chin-Ups", "Bicep Curls", "Bent Over Rows", "Lat Pulldown"},
-            {},
-            {"Squats", "Leg Extensions", "Leg Curls", "Calf Raises"},
-            {"Shoulder Press", "Side Lateral Raise", "Upright Rows", "Seated Bent Over Flys"},
-            {},
-            {}
-    };
-
     public static final String WEEK_PREFERENCES = "WEEK_PREFERENCES";
     SharedPreferences weekPreferences;
 
