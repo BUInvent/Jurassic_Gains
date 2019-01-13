@@ -42,7 +42,7 @@
                 android:paddingLeft="16dp"
                 numberpicker:focusable="false"
                 numberpicker:max="30"
-                numberpicker:min="0"
+                numberpicker:min="1"
                 numberpicker:unit="1"
                 numberpicker:value="8" />
 
@@ -68,8 +68,8 @@
                 android:gravity="center"
                 android:paddingLeft="16dp"
                 numberpicker:focusable="false"
-                numberpicker:max="30"
-                numberpicker:min="0"
+                numberpicker:max="10"
+                numberpicker:min="1"
                 numberpicker:unit="1"
                 numberpicker:value="3" />
 
