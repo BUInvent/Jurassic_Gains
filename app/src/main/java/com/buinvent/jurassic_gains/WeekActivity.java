@@ -34,18 +34,6 @@ import java.util.HashMap;
 // Activity for the screen that gives users the ability to select the week they're training
 public class WeekActivity extends AppCompatActivity {
 
-    public static final int WEEKS_NUM = 12;  // Number of weeks for training
-    public static final int SET_NUM = 3;
-    public static final String[][] EXERCISES = new String[][]{
-            {"Bench Press", "Skull Crushers", "Flys", "Incline Bench Press"},
-            {"Chin-Ups", "Bicep Curls", "Bent Over Rows", "Lat Pulldown"},
-            {},
-            {"Squats", "Leg Extensions", "Leg Curls", "Calf Raises"},
-            {"Shoulder Press", "Side Lateral Raise", "Upright Rows", "Seated Bent Over Flys"},
-            {},
-            {}
-    };
-
     public static final String WEEK_PREFERENCES = "WEEK_PREFERENCES";
     SharedPreferences weekPreferences;
 
@@ -71,7 +59,21 @@ public class WeekActivity extends AppCompatActivity {
                     gainer = documentSnapshot.toObject(Gainer.class);
                     weekChecks = gainer.getWeekChecks();
                     addLayout(weekChecks);
-                } else createBlankDoc(user.getUid());
+                }
+
+                // Add routine button
+                Button routineButton = new Button(getApplicationContext());
+                routineButton.setText("CREATE ROUTINE");
+                routineButton.setTextSize(30);
+                routineButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(view.getContext(), RoutineActivity.class);
+                        view.getContext().startActivity(intent);
+                    }
+                });
+                LinearLayout mLinearLayout = findViewById(R.id.week_layout);
+                mLinearLayout.addView(routineButton);
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
@@ -139,14 +141,11 @@ public class WeekActivity extends AppCompatActivity {
         }
 
         // Add checkbox listener for the first week's checkbox
-        checkBoxListener(checkBoxes[0], checkBoxes[1], buttons[1]);
-        // Add a checkbox listener for the last week's checkbox
-        checkBoxListener(checkBoxes[weekChecks.length - 1], checkBoxes[weekChecks.length - 2], weekChecks.length);
-
-        // Add routine button
-        Button routineButton = new Button(this);
-        routineButton.setText("CREATE ROUTINE");
-        mLinearLayout.addView(routineButton);
+        if (checkBoxes.length > 1) {
+            checkBoxListener(checkBoxes[0], checkBoxes[1], buttons[1]);
+            // Add a checkbox listener for the last week's checkbox
+            checkBoxListener(checkBoxes[weekChecks.length - 1], checkBoxes[weekChecks.length - 2], weekChecks.length);
+        }
     }
 
     //    This is for all weeks that are not first or last
@@ -231,75 +230,6 @@ public class WeekActivity extends AppCompatActivity {
                     });
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void createBlankDoc(String userID) {
-
-        HashMap<String, HashMap> setsMap = new HashMap<>();
-
-        HashMap<String, Integer> setMap = new HashMap<>();
-        setMap.put("weight", 0);
-        setMap.put("reps", 0);
-
-        for (int i = 1; i <= SET_NUM; i++) {
-            setsMap.put("set " + i, setMap);
-        }
-
-        HashMap<String, HashMap> daysMap = new HashMap<>();
-
-        for (int i = 0; i < EXERCISES.length; i++) {
-
-            HashMap<String, HashMap> exercisesMap = new HashMap<>();
-            for (int j = 0; j < EXERCISES[i].length; j++) {
-                HashMap<String, Object> exerciseMap = new HashMap<>();
-                exerciseMap.put("sets", setsMap);
-                exerciseMap.put("name", EXERCISES[i][j]);
-                exercisesMap.put("exercise " + j, exerciseMap);
-            }
-
-            HashMap<String, Object> dayMap = new HashMap<>();
-            dayMap.put("checked", false);
-            dayMap.put("exercises", exercisesMap);
-
-            daysMap.put("DAY " + (i + 1), dayMap);
-        }
-
-        HashMap<String, Object> weekMap = new HashMap<>();
-        weekMap.put("checked", false);
-        weekMap.put("days", daysMap);
-
-        HashMap<String, HashMap> weeksMap = new HashMap<>();
-        for (int i = 0; i < WEEKS_NUM; i++) {
-            weeksMap.put("WEEK " + (i + 1), weekMap);
-        }
-
-        HashMap<String, HashMap> docMap = new HashMap<>();
-        docMap.put("weeks", weeksMap);
-
-        // Add a new document with the user's ID
-        db.collection("users")
-                .document(userID)
-                .set(docMap)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Success", "DocumentSnapshot successfully written!");
-                        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot innerDocumentSnapshot) {
-                                gainer = innerDocumentSnapshot.toObject(Gainer.class);
-                                weekChecks = gainer.getWeekChecks();
-                                addLayout(weekChecks);
-                            }
-                        });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("Failure", "Error writing document", e);
-                    }
-                });
     }
 
     // If user hits back button on bottom (otherwise will go to blank screen)

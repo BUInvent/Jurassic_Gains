@@ -84,7 +84,6 @@ public class DayActivity extends AppCompatActivity {
             final int iNum = i;
 
             // Set the checkbox checked based on what was saved
-//            if (firstTime) workoutDayBox[i].setChecked(dayChecks[i]);
             workoutDayBox[i].setChecked(dayPreferences.getBoolean("WEEK " + weekNum + workoutDay, false));
 
             // disable workout day buttons and boxes if there are no exercises on those days

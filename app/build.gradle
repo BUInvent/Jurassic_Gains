@@ -34,6 +34,8 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:4.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.google.firebase:firebase-firestore:16.+'
+    implementation 'com.github.travijuu:numberpicker:1.0.7'
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
 
 apply plugin: 'com.google.gms.google-services'
@@ -47,4 +49,3 @@ android {
         experimental = true
     }
 }
-

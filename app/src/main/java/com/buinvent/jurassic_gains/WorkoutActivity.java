@@ -29,7 +29,6 @@ public class WorkoutActivity extends AppCompatActivity {
 
     public static final String EXTRA_DAY = "com.buinvent.jurassic_gains.DAY";
     public static final String WORKOUT_PREFERENCES = "WORKOUT_PREFERENCES";
-    public static final int SET_NUM = 3;
     SharedPreferences workoutPreferences;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -63,7 +62,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
             for (int i = 0; i < exercises.size(); i++) {
                 String exercise = (String) exercises.get(i);
-                HashMap<String, HashMap<String, Integer>> exerciseSets = gainer.getExerciseSets(weekNumExtra, dayNumExtra, "exercise " + i);
+                HashMap<String, HashMap<String, Integer>> exerciseSets = gainer.getExerciseSets(weekNumExtra, dayNumExtra, "exercise " + (i + 1));
 
                 for (int j = 1; j <= exerciseSets.size(); j++) {
                     editor.putString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + j, String.valueOf(exerciseSets.get("set " + j).get("weight")));
@@ -131,7 +130,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
             subLinearLayout.addView(statLabelLayout, linearLayoutParams);
 
-            HashMap<String, HashMap<String, Integer>> exerciseSets = gainer.getExerciseSets(weekNumExtra, dayNumExtra, "exercise " + i);
+            HashMap<String, HashMap<String, Integer>> exerciseSets = gainer.getExerciseSets(weekNumExtra, dayNumExtra, "exercise " + (i + 1));
 
             // For every set
             for (int j = 1; j <= exerciseSets.size(); j++) {
@@ -152,7 +151,8 @@ public class WorkoutActivity extends AppCompatActivity {
                 // Grab and set the previous weight and reps
                 String previousWeight = workoutPreferences.getString("WEEK " + (weekNumExtra - 1) + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + j, "");
                 String previousReps = workoutPreferences.getString("WEEK " + (weekNumExtra - 1) + "DAY " + dayNumExtra + "Exercise " + exercise + "reps" + j, "");
-                if(!previousWeight.equals("") && !previousReps.equals("") && !previousWeight.equals("0") && !previousReps.equals("0")) previousText.setText(previousWeight + "x" + previousReps);
+                if (!previousWeight.equals("") && !previousReps.equals("") && !previousWeight.equals("0") && !previousReps.equals("0"))
+                    previousText.setText(previousWeight + "x" + previousReps);
                 else previousText.setText("None");
 
                 String temp = workoutPreferences.getString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + j, "");
@@ -187,7 +187,7 @@ public class WorkoutActivity extends AppCompatActivity {
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (s.toString().equals("")) s = "0";
                         db.collection("users").document(user.getUid())
-                                .update("weeks.WEEK " + (weekNumExtra) + ".days.DAY " + (dayNumExtra) + ".exercises.exercise " + iNum + ".sets.set " + jNum + ".reps", Integer.parseInt(s.toString()));
+                                .update("weeks.WEEK " + (weekNumExtra) + ".days.DAY " + (dayNumExtra) + ".exercises.exercise " + (iNum + 1) + ".sets.set " + jNum + ".reps", Integer.parseInt(s.toString()));
                         editor.putString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "reps" + jNum, s.toString());
                         editor.apply();
                     }
@@ -207,7 +207,7 @@ public class WorkoutActivity extends AppCompatActivity {
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (s.toString().equals("")) s = "0";
                         db.collection("users").document(user.getUid())
-                                .update("weeks.WEEK " + (weekNumExtra) + ".days.DAY " + (dayNumExtra) + ".exercises.exercise " + iNum + ".sets.set " + (jNum) + ".weight", Integer.parseInt(s.toString()));
+                                .update("weeks.WEEK " + (weekNumExtra) + ".days.DAY " + (dayNumExtra) + ".exercises.exercise " + (iNum + 1) + ".sets.set " + (jNum) + ".weight", Integer.parseInt(s.toString()));
                         editor.putString("WEEK " + weekNumExtra + "DAY " + dayNumExtra + "Exercise " + exercise + "weight" + jNum, s.toString());
                         editor.apply();
                     }
@@ -258,6 +258,11 @@ public class WorkoutActivity extends AppCompatActivity {
         editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
         editText.setText(text);
         return editText;
+    }
+
+//    reset first time (this will be done when a new routine is made)
+    public static void clearFirstTime(){
+        FIRST_TIME.clear();
     }
 
     // This was needed for back button
