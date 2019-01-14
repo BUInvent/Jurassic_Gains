@@ -6,11 +6,12 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
 import android.widget.*
 import com.travijuu.numberpicker.library.NumberPicker
-import android.widget.LinearLayout.LayoutParams
 import android.text.Editable
 import android.text.TextWatcher
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+
+
 
 
 class CustomDayActivity : AppCompatActivity() {
@@ -85,7 +86,13 @@ class CustomDayActivity : AppCompatActivity() {
         val dayNum = customDayIntent.getIntExtra("DAY_NUM", 1)
 
         xButton.setImageResource(R.drawable.delete)
-        xButton.setLayoutParams(LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT))
+
+        val xButtonParams = LinearLayout.LayoutParams(100, 100)
+        xButtonParams.setMargins(25, 9, 12, 0)
+        xButton.setLayoutParams(xButtonParams)
+        xButton.setBackgroundResource(0)
+        xButton.setPadding(5, 5, 5, 5)
+
         xButton.setScaleType(ImageView.ScaleType.FIT_CENTER)
         xButton.setOnClickListener {
             mLinearLayout.removeView(exerciseLayout) // remove exercise from screen
