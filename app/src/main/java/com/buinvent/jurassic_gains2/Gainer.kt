@@ -1,4 +1,4 @@
-package com.buinvent.jurassic_gains
+package com.buinvent.jurassic_gains2
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

@@ -1,4 +1,4 @@
-package com.buinvent.jurassic_gains;
+package com.buinvent.jurassic_gains2;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
