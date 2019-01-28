@@ -1,4 +1,4 @@
-package com.buinvent.jurassic_gains;
+package com.buinvent.jurassic_gains2;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -27,8 +27,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
 
 
 // Activity for the screen that gives users the ability to select the week they're training

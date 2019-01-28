@@ -1,4 +1,4 @@
-package com.buinvent.jurassic_gains;
+package com.buinvent.jurassic_gains2;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,9 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class DayActivity extends AppCompatActivity {
 
